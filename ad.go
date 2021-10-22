@@ -5,7 +5,7 @@ package qianchuanSDK
 
 import (
 	"context"
-	"github.com/CriarBrand/qianchuangSDK/conf"
+	"github.com/CriarBrand/qianchuanSDK/conf"
 	"net/http"
 )
 

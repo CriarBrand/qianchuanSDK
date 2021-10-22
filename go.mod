@@ -1,3 +1,3 @@
-module github.com/CriarBrand/qianchuangSDK
+module github.com/CriarBrand/qianchuanSDK
 
 go 1.16

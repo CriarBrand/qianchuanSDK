@@ -7,7 +7,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/CriarBrand/qianchuangSDK/conf"
+	"github.com/CriarBrand/qianchuanSDK/conf"
 )
 
 // OauthParam 授权参数

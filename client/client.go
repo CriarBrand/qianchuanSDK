@@ -13,8 +13,8 @@ import (
 	"net/http/httputil"
 	"strings"
 
-	"github.com/CriarBrand/qianchuangSDK/internal/log"
-	"github.com/CriarBrand/qianchuangSDK/reqid"
+	"github.com/CriarBrand/qianchuanSDK/internal/log"
+	"github.com/CriarBrand/qianchuanSDK/reqid"
 )
 
 // UserAgent UA

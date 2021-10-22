@@ -4,13 +4,13 @@
 
 ## 安装
 ```go
-import "github.com/CriarBrand/qianchuangSDK"
+import "github.com/CriarBrand/qianchuanSDK"
 ```
 ## 使用
 **初始化**
 ```go
-credentials := qianchuangSDK.NewCredentials("CLIENT_KEY", "CLIENT_SECRET")
-manager := qianchuangSDK.NewManager(credentials, nil)
+credentials := qianchuanSDK.NewCredentials("CLIENT_KEY", "CLIENT_SECRET")
+manager := qianchuanSDK.NewManager(credentials, nil)
 ```
 
 **生成授权链接,获取授权码** `/platform/oauth/connect/`

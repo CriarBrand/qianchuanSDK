@@ -7,7 +7,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/CriarBrand/qianchuangSDK/auth"
+	"github.com/CriarBrand/qianchuanSDK/auth"
 )
 
 type transport struct {
