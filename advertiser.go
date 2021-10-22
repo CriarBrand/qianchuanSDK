@@ -6,8 +6,8 @@ package qianchuanSDK
 import (
 	"context"
 	"encoding/json"
+	"github.com/CriarBrand/qianchuangSDK/conf"
 	"net/http"
-	"qianchuanSDK/conf"
 )
 
 // AdvertiserListReq 获取已授权的账户（店铺/代理商）-请求

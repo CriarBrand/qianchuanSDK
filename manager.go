@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"qianchuanSDK/auth"
-	"qianchuanSDK/client"
-	"qianchuanSDK/conf"
+	"github.com/CriarBrand/qianchuangSDK/auth"
+	"github.com/CriarBrand/qianchuangSDK/client"
+	"github.com/CriarBrand/qianchuangSDK/conf"
 )
 
 // Manager Manager结构体
