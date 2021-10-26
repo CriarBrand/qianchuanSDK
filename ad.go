@@ -5,6 +5,7 @@ package qianchuanSDK
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/CriarBrand/qianchuanSDK/conf"
 	"net/http"
 )
@@ -284,3 +285,82 @@ func (m *Manager) AdUpdate(req AdUpdateReq) (res *AdUpdateRes, err error) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+
+// AdListGetReq 获取账户下计划列表（不含创意）
+type AdListGetReq struct {
+	AdvertiserId     int64              // 千川广告账户ID
+	RequestAwemeInfo int64              // 是否包含抖音号信息，允许值：0：不包含；1：包含；默认不返回
+	Page             int64              // 页码，默认为1
+	PageSize         int64              // 页面大小，默认值: 10， 允许值：10、20、50、100、500、1000
+	Filtering        AdListGetFiltering // 过滤器，无过滤条件情况下返回“所有不包含已删除”的广告组列表
+	AccessToken      string             // 调用/oauth/access_token/生成的token，此token需要用户授权。
+}
+
+type AdListGetFiltering struct {
+	Ids               []int64 `json:"ids,omitempty"`                  // 按计划ID过滤，list长度限制 1-100
+	AdName            string  `json:"ad_name,omitempty"`              // 按计划名称过滤，长度为1-30个字符
+	Status            string  `json:"status,omitempty"`               // 按计划状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-广告计划查询状态】
+	MarketingGoal     string  `json:"marketing_goal"`                 // 按营销目标过滤，允许值：VIDEO_PROM_GOODS：短视频带货；LIVE_PROM_GOODS：直播带货
+	CampaignId        int64   `json:"campaign_id,omitempty"`          // 按广告组ID过滤
+	AdCreateStartDate string  `json:"ad_create_start_date,omitempty"` // 计划创建开始时间，格式："yyyy-mm-dd"
+	AdCreateEndDate   string  `json:"ad_create_end_date,omitempty"`   // 计划创建结束时间，与ad_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
+	AdModifyTime      string  `json:"ad_modify_time,omitempty"`       // 计划修改时间，精确到小时，格式："yyyy-mm-dd HH"
+}
+
+type AdListGetResData struct {
+	List []struct {
+		AdId          int64  `json:"ad_id"`
+		CampaignId    int64  `json:"campaign_id"`
+		MarketingGoal string `json:"marketing_goal"`
+		PromotionWay  string `json:"promotion_way"`
+		Name          string `json:"name"`
+		Status        string `json:"status"`
+		OptStatus     string `json:"opt_status"`
+		AdCreateTime  string `json:"ad_create_time"`
+		AdModifyTime  string `json:"ad_modify_time"`
+		ProductInfo   []struct {
+			Id            int64   `json:"id"`
+			Name          string  `json:"name"`
+			DiscountPrice float64 `json:"discount_price"`
+			Img           string
+		} `json:"product_info"`
+		AwemeInfo []struct {
+			AwemeId     int64  `json:"aweme_id"`
+			AwemeName   string `json:"aweme_name"`
+			AwemeShowId string `json:"aweme_show_id"`
+			AwemeAvatar string `json:"aweme_avatar"`
+		} `json:"aweme_info"`
+		DeliverySetting struct {
+			SmartBidType   string  `json:"smart_bid_type"`
+			ExternalAction string  `json:"external_action"`
+			Budget         float64 `json:"budget"`
+			BudgetMode     string  `json:"budget_mode"`
+			CpaBid         float64 `json:"cpa_bid"`
+			StartTime      string  `json:"start_time"`
+			EndTime        string  `json:"end_time"`
+		} `json:"delivery_setting"`
+	} `json:"list"`
+	FailList []int64  `json:"fail_list"` // 获取失败的计划ID列表
+	PageInfo PageInfo `json:"page_info"`
+}
+
+// AdListGetRes 获取广告账户数据-返回结构体
+type AdListGetRes struct {
+	QCError
+	Data AdListGetResData `json:"data"`
+}
+
+// AdListGet 获取广告账户数据
+func (m *Manager) AdListGet(req AdListGetReq) (res *AdListGetRes, err error) {
+	header := http.Header{}
+	header.Add("Access-Token", req.AccessToken)
+	// 接收一个结构体并转为string格式
+	filtering, err := json.Marshal(req.Filtering)
+	if err != nil {
+		panic(err)
+	}
+	err = m.client.CallWithJson(context.Background(), &res, "GET",
+		m.url("%s?advertiser_id=%d&request_aweme_info=%d&filtering=%s&page=%d&page_size=%d",
+			conf.API_AD_LIST_GET, req.AdvertiserId, req.RequestAwemeInfo, string(filtering), req.Page, req.PageSize), header, nil)
+	return res, err
+}
