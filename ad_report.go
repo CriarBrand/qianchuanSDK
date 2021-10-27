@@ -24,25 +24,26 @@ type AdvertiserReportReq struct {
 type AdvertiserReportFiltering struct {
 	MarketingGoal string `json:"marketing_goal"`
 }
+type AdvertiserReportResDetail struct {
+	AdvertiserId         int64   `json:"advertiser_id"`            // 广告主id
+	StatCost             float64 `json:"stat_cost"`                // 消耗
+	ShowCnt              int64   `json:"show_cnt"`                 // 展示次数
+	Ctr                  float64 `json:"ctr"`                      // 点击率
+	CpmPlatform          float64 `json:"cpm_platform"`             // 平均千次展示费用
+	ClickCnt             int64   `json:"click_cnt"`                // 点击次数
+	PayOrderCount        int64   `json:"pay_order_count"`          // 成交订单数
+	CreateOrderAmount    float64 `json:"create_order_amount"`      // 下单成交金额
+	CreateOrderCount     int64   `json:"create_order_count"`       // 下单订单数
+	PayOrderAmount       float64 `json:"pay_order_amount"`         // 成交订单金额
+	CreateOrderRoi       float64 `json:"create_order_roi"`         // 下单roi
+	DyFollow             int64   `json:"dy_follow"`                // 新增粉丝数
+	PrepayAndPayOrderRoi float64 `json:"prepay_and_pay_order_roi"` // 支付roi
+	PrepayOrderCount     int64   `json:"prepay_order_count"`       // 广告预售订单数
+	PrepayOrderAmount    float64 `json:"prepay_order_amount"`      // 广告预售订单金额
+}
 
 type AdvertiserReportResData struct {
-	List []struct {
-		AdvertiserId         int64   `json:"advertiser_id"`            // 广告主id
-		StatCost             float64 `json:"stat_cost"`                // 消耗
-		ShowCnt              int64   `json:"show_cnt"`                 // 展示次数
-		Ctr                  float64 `json:"ctr"`                      // 点击率
-		CpmPlatform          float64 `json:"cpm_platform"`             // 平均千次展示费用
-		ClickCnt             int64   `json:"click_cnt"`                // 点击次数
-		PayOrderCount        int64   `json:"pay_order_count"`          // 成交订单数
-		CreateOrderAmount    float64 `json:"create_order_amount"`      // 下单成交金额
-		CreateOrderCount     int64   `json:"create_order_count"`       // 下单订单数
-		PayOrderAmount       float64 `json:"pay_order_amount"`         // 成交订单金额
-		CreateOrderRoi       float64 `json:"create_order_roi"`         // 下单roi
-		DyFollow             int64   `json:"dy_follow"`                // 新增粉丝数
-		PrepayAndPayOrderRoi float64 `json:"prepay_and_pay_order_roi"` // 支付roi
-		PrepayOrderCount     int64   `json:"prepay_order_count"`       // 广告预售订单数
-		PrepayOrderAmount    float64 `json:"prepay_order_amount"`      // 广告预售订单金额
-	} `json:"list"`
+	List []AdvertiserReportResDetail `json:"list"`
 }
 
 // AdvertiserReportRes 获取广告账户数据-返回结构体
@@ -92,42 +93,44 @@ type AdReportFiltering struct {
 	MarketingGoal string  `json:"marketing_goal"` // 过滤条件 营销目标，允许值：VIDEO_PROM_GOODS：短视频带货  LIVE_PROM_GOODS：直播间带货  ALL：不限
 }
 
+type AdReportResDetail struct {
+	AdvertiserId               int64   `json:"advertiser_id"`                  // 广告主id
+	AdId                       int64   `json:"ad_id"`                          // 广告计划id
+	StatCost                   float64 `json:"stat_cost"`                      // 消耗
+	ShowCnt                    int64   `json:"show_cnt"`                       // 展示次数
+	Ctr                        float64 `json:"ctr"`                            // 点击率
+	CpmPlatform                float64 `json:"cpm_platform"`                   // 平均千次展示费用
+	ClickCnt                   int64   `json:"click_cnt"`                      // 点击次数
+	PayOrderCount              int64   `json:"pay_order_count"`                // 成交订单数
+	CreateOrderAmount          float64 `json:"create_order_amount"`            // 下单成交金额
+	CreateOrderCount           int64   `json:"create_order_count"`             // 下单订单数
+	PayOrderAmount             float64 `json:"pay_order_amount"`               // 成交订单金额
+	CreateOrderRoi             float64 `json:"create_order_roi"`               // 下单roi
+	PrepayAndPayOrderRoi       float64 `json:"prepay_and_pay_order_roi"`       // 支付roi
+	PrepayOrderCount           int64   `json:"prepay_order_count"`             // 广告预售订单数
+	PrepayOrderAmount          float64 `json:"prepay_order_amount"`            // 广告预售订单金额
+	DyFollow                   int64   `json:"dy_follow"`                      // 新增粉丝数
+	ConvertCnt                 int64   `json:"convert_cnt"`                    // 转化数
+	ConvertCost                int64   `json:"convert_cost"`                   // 转化成本
+	ConvertRate                float64 `json:"convert_rate"`                   // 转化率
+	DyShare                    int64   `json:"dy_share"`                       // 分享次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
+	DyComment                  int64   `json:"dy_comment"`                     // 评论次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
+	DyLike                     int64   `json:"dy_like"`                        // 点赞次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
+	LivePayOrderCostPerOrder   float64 `json:"live_pay_order_cost_per_order"`  // 成交客单价。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveEnterCnt          int64   `json:"luban_live_enter_cnt"`           // 直播间观看人次。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LiveWatchOneMinuteCount    int64   `json:"live_watch_one_minute_count"`    // 直播间超过1分钟观看人次。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LiveFansClubJoinCnt        int64   `json:"live_fans_club_join_cnt"`        // 直播间新加团人次。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveSlidecartClickCnt int64   `json:"luban_live_slidecart_click_cnt"` // 直播间查看购物车次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveClickProductCnt   int64   `json:"luban_live_click_product_cnt"`   // 直播间商品点击次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveCommentCnt        int64   `json:"luban_live_comment_cnt"`         // 直播间评论次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveShareCnt          int64   `json:"luban_live_share_cnt"`           // 直播间分享次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveGiftCnt           int64   `json:"luban_live_gift_cnt"`            // 直播间打赏次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+	LubanLiveGiftAmount        float64 `json:"luban_live_gift_amount"`         // 直播间音浪收入。短视频带货：VIDEO_PROM_GOODS 不支持该指标
+}
+
 type AdReportResData struct {
-	List []struct {
-		AdvertiserId               int64   `json:"advertiser_id"`                  // 广告主id
-		AdId                       int64   `json:"ad_id"`                          // 广告计划id
-		StatCost                   float64 `json:"stat_cost"`                      // 消耗
-		ShowCnt                    int64   `json:"show_cnt"`                       // 展示次数
-		Ctr                        float64 `json:"ctr"`                            // 点击率
-		CpmPlatform                float64 `json:"cpm_platform"`                   // 平均千次展示费用
-		ClickCnt                   int64   `json:"click_cnt"`                      // 点击次数
-		PayOrderCount              int64   `json:"pay_order_count"`                // 成交订单数
-		CreateOrderAmount          float64 `json:"create_order_amount"`            // 下单成交金额
-		CreateOrderCount           int64   `json:"create_order_count"`             // 下单订单数
-		PayOrderAmount             float64 `json:"pay_order_amount"`               // 成交订单金额
-		CreateOrderRoi             float64 `json:"create_order_roi"`               // 下单roi
-		PrepayAndPayOrderRoi       float64 `json:"prepay_and_pay_order_roi"`       // 支付roi
-		PrepayOrderCount           int64   `json:"prepay_order_count"`             // 广告预售订单数
-		PrepayOrderAmount          float64 `json:"prepay_order_amount"`            // 广告预售订单金额
-		DyFollow                   int64   `json:"dy_follow"`                      // 新增粉丝数
-		ConvertCnt                 int64   `json:"convert_cnt"`                    // 转化数
-		ConvertCost                int64   `json:"convert_cost"`                   // 转化成本
-		ConvertRate                float64 `json:"convert_rate"`                   // 转化率
-		DyShare                    int64   `json:"dy_share"`                       // 分享次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
-		DyComment                  int64   `json:"dy_comment"`                     // 评论次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
-		DyLike                     int64   `json:"dy_like"`                        // 点赞次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
-		LivePayOrderCostPerOrder   float64 `json:"live_pay_order_cost_per_order"`  // 成交客单价。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveEnterCnt          int64   `json:"luban_live_enter_cnt"`           // 直播间观看人次。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LiveWatchOneMinuteCount    int64   `json:"live_watch_one_minute_count"`    // 直播间超过1分钟观看人次。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LiveFansClubJoinCnt        int64   `json:"live_fans_club_join_cnt"`        // 直播间新加团人次。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveSlidecartClickCnt int64   `json:"luban_live_slidecart_click_cnt"` // 直播间查看购物车次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveClickProductCnt   int64   `json:"luban_live_click_product_cnt"`   // 直播间商品点击次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveCommentCnt        int64   `json:"luban_live_comment_cnt"`         // 直播间评论次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveShareCnt          int64   `json:"luban_live_share_cnt"`           // 直播间分享次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveGiftCnt           int64   `json:"luban_live_gift_cnt"`            // 直播间打赏次数。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-		LubanLiveGiftAmount        float64 `json:"luban_live_gift_amount"`         // 直播间音浪收入。短视频带货：VIDEO_PROM_GOODS 不支持该指标
-	} `json:"list"`
-	PageInfo PageInfo `json:"page_info"`
+	List     []AdReportResDetail `json:"list"`
+	PageInfo PageInfo            `json:"page_info"`
 }
 
 // AdReportRes 获取广告计划数据-返回结构体
