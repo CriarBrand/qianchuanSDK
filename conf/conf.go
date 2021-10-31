@@ -85,4 +85,34 @@ const (
 
 	// API_AD_REJECT_REASON 获取计划审核建议
 	API_AD_REJECT_REASON = "/open_api/v1.0/qianchuan/ad/reject_reason/"
+
+	// API_AD_CREATIVE_UPDATE 更新创意状态
+	API_AD_CREATIVE_UPDATE = "/open_api/v1.0/qianchuan/creative/status/update/"
+
+	// API_AD_CREATIVE_GET 获取账户下创意列表
+	API_AD_CREATIVE_GET = "/open_api/v1.0/qianchuan/creative/get/"
+
+	// API_AD_CREATIVE_REJECT 获取创意审核建议
+	API_AD_CREATIVE_REJECT = "/open_api/v1.0/qianchuan/creative/reject_reason/"
+
+	// API_PRODUCT_AVAILABLE_GET 获取千川账户下可投商品列表接口
+	API_PRODUCT_AVAILABLE_GET = "/open_api/v1.0/qianchuan/product/available/get/"
+
+	// API_AWEME_AUTHORIZED_GET 获取千川账户下已授权抖音号
+	API_AWEME_AUTHORIZED_GET = "/open_api/v1.0/qianchuan/aweme/authorized/get/"
+
+	// API_FILE_IMAGE_AD 上传图片素材
+	API_FILE_IMAGE_AD = "/open_api/2/file/image/ad/"
+
+	// API_FILE_VIDEO_AD 上传视频素材
+	API_FILE_VIDEO_AD = "/open_api/2/file/video/ad/"
+
+	// API_FILE_IMAGE_GET 获取素材库的图片
+	API_FILE_IMAGE_GET = "/open_api/2/file/image/get/"
+
+	// API_FILE_VIDEO_GET 获取素材库的视频
+	API_FILE_VIDEO_GET = "/open_api/2/file/video/get/"
+
+	// API_FILE_VIDEO_AWEME_GET 获取抖音号下的视频
+	API_FILE_VIDEO_AWEME_GET = "/open_api/v1.0/qianchuan/file/video/aweme/get/"
 )

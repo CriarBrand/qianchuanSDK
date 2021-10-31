@@ -30,7 +30,7 @@ func NewManager(credentials *auth.Credentials, tr http.RoundTripper) *Manager {
 	}
 }
 
-func (manager *Manager) url(format string, args ...interface{}) string {
+func (m *Manager) url(format string, args ...interface{}) string {
 	fmt.Println(conf.API_HTTP_SCHEME + conf.API_HOST + fmt.Sprintf(format, args...))
 	return conf.API_HTTP_SCHEME + conf.API_HOST + fmt.Sprintf(format, args...)
 }
