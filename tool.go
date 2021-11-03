@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/CriarBrand/qianchuanSDK/conf"
 	"net/http"
+	"net/url"
 )
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -214,7 +215,7 @@ func (m *Manager) ToolsInterestActionActionKeyword(req ToolsInterestActionAction
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&query_words=%s&action_scene=%s&action_days=%d",
-			conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD, req.AdvertiserId, req.QueryWords, string(actionScene), req.ActionDays), header, nil)
+			conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD, req.AdvertiserId, url.QueryEscape(req.QueryWords), url.QueryEscape(string(actionScene)), req.ActionDays), header, nil)
 	return res, err
 }
 
@@ -229,7 +230,7 @@ type ToolsInterestActionInterestCategoryReq struct {
 // ToolsInterestActionInterestCategoryRes 兴趣类目查询 的 响应结构体
 type ToolsInterestActionInterestCategoryRes struct {
 	QCError
-	Data struct {
+	Data []struct {
 		Id       string `json:"id"`
 		Num      string `json:"num"`
 		Name     string `json:"name"`
@@ -287,22 +288,22 @@ func (m *Manager) ToolsInterestActionInterestKeyword(req ToolsInterestActionInte
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&query_words=%s&action_scene=%s",
-			conf.API_TOOLS_INTEREST_ACTION_INTEREST_KEYWORD, req.AdvertiserId, req.QueryWords), header, nil)
+		m.url("%s?advertiser_id=%d&query_words=%s",
+			conf.API_TOOLS_INTEREST_ACTION_INTEREST_KEYWORD, req.AdvertiserId, url.QueryEscape(req.QueryWords)), header, nil)
 	return res, err
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-// ToolsCreativeWordSelectKeywordReq 查询动态创意词包 的 请求结构体
-type ToolsCreativeWordSelectKeywordReq struct {
+// ToolsCreativeWordSelectReq 查询动态创意词包 的 请求结构体
+type ToolsCreativeWordSelectReq struct {
 	AccessToken     string   `json:"access_token"`      // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	AdvertiserId    int64    `json:"advertiser_id"`     // 广告主ID
 	CreativeWordIds []string `json:"creative_word_ids"` // 创意词包id列表，如不填默认返回所有创意词包
 }
 
-// ToolsCreativeWordSelectKeywordRes 查询动态创意词包 的 响应结构体
-type ToolsCreativeWordSelectKeywordRes struct {
+// ToolsCreativeWordSelectRes 查询动态创意词包 的 响应结构体
+type ToolsCreativeWordSelectRes struct {
 	QCError
 	Data struct {
 		CreativeWord []struct { // 词包列表
@@ -318,8 +319,8 @@ type ToolsCreativeWordSelectKeywordRes struct {
 	} `json:"data"`
 }
 
-// ToolsCreativeWordSelectKeyword 查询动态创意词包
-func (m *Manager) ToolsCreativeWordSelectKeyword(req ToolsCreativeWordSelectKeywordReq) (res *ToolsCreativeWordSelectKeywordRes, err error) {
+// ToolsCreativeWordSelect 查询动态创意词包
+func (m *Manager) ToolsCreativeWordSelect(req ToolsCreativeWordSelectReq) (res *ToolsCreativeWordSelectRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	creativeWordIds, err := json.Marshal(req.CreativeWordIds)

@@ -72,7 +72,7 @@ type AwemeAuthorizedGetRes struct {
 			AwemeName   string   `json:"aweme_name"`    //抖音号名称
 			AwemeStatus string   `json:"aweme_status"`  //抖音号带货状态，返回值： NORMAL可以正常投放 ANCHOR_FORBID带货口碑分过低，暂时无法创建计划 ANCHOR_REACH_UPPER_LIMIT_TODAY带货分过低或暂无带货分，可以创建计划，但无法产生消耗，带货分恢复正常后可正常消耗
 			BindType    []string `json:"bind_type"`     //抖音号关系类型
-		} `json:"product_list"`
+		} `json:"aweme_id_list"`
 	} `json:"data"`
 }
 

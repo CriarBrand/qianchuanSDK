@@ -162,8 +162,9 @@ func (m *Manager) FileVideoAd(req FileVideoAdReq) (res *FileVideoAdRes, err erro
 
 // FileImageGetReq 获取素材库的图片 的 请求结构体
 type FileImageGetReq struct {
-	AccessToken string   // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	Filtering   struct { //过滤条件
+	AccessToken  string   // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId int64    // 千川广告账户ID
+	Filtering    struct { //过滤条件
 		ImageIds    []string  `json:"image_ids"`    //图片ids，可以根据图片ids（创意中使用的图片key，存在一张图片对应多个image_ids的情况）进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
 		MaterialIds []int64   `json:"material_ids"` //素材id列表，可以根据material_ids（素材报表使用的id，一个素材唯一对应一个素材id）进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
 		Signatures  []string  `json:"signatures"`   //md5值列表，可以根据素材的md5进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
@@ -173,9 +174,8 @@ type FileImageGetReq struct {
 		StartTime   string    `json:"start_time"`   //根据视频上传时间进行过滤的起始时间，与end_time搭配使用，格式：yyyy-mm-dd
 		EndTime     string    `json:"end_time"`     //根据视频上传时间进行过滤的截止时间，与start_time搭配使用，格式：yyyy-mm-dd
 	} `json:"filtering"`
-	Page         int64 `json:"page"`
-	PageSize     int64 `json:"page_size"`
-	AdvertiserId int64 // 千川广告账户ID
+	Page     int64 `json:"page"`
+	PageSize int64 `json:"page_size"`
 }
 
 // FileImageGetRes 获取素材库的图片 的 响应结构体
@@ -208,7 +208,7 @@ func (m *Manager) FileImageGet(req FileImageGetReq) (res *FileImageGetRes, err e
 		panic(err)
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&filtering=%d&page=%d&page_size=%d",
+		m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
 			conf.API_FILE_IMAGE_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
 	return res, err
 }
@@ -237,7 +237,7 @@ type FileVideoGetReq struct {
 type FileVideoGetRes struct {
 	QCError
 	Data struct {
-		List struct { //素材列表
+		List []struct { //素材列表
 			Id         string   `json:"id"`          //视频ID
 			Size       int64    `json:"size"`        //视频大小
 			Width      int64    `json:"width"`       //视频宽度
@@ -268,7 +268,7 @@ func (m *Manager) FileVideoGet(req FileVideoGetReq) (res *FileVideoGetRes, err e
 		panic(err)
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&filtering=%d&page=%d&page_size=%d",
+		m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
 			conf.API_FILE_VIDEO_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
 	return res, err
 }
@@ -291,7 +291,7 @@ type FileVideoAwemeGetReq struct {
 type FileVideoAwemeGetRes struct {
 	QCError
 	Data struct {
-		List struct { //视频素材列表
+		List []struct { //视频素材列表
 			AwemeItemId   string `json:"aweme_item_id"`   //抖音短视频 ID
 			VideoCoverUrl string `json:"video_cover_url"` //视频封面图片url
 			Width         int64  `json:"width"`           //视频宽度
@@ -319,7 +319,7 @@ func (m *Manager) FileVideoAwemeGet(req FileVideoAwemeGetReq) (res *FileVideoAwe
 		panic(err)
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&aweme_id=%d&filtering=%d&cursor=%d&count=%d",
-			conf.API_FILE_VIDEO_AWEME_GET, req.AdvertiserId, string(filtering), req.Cursor, req.Count), header, nil)
+		m.url("%s?advertiser_id=%d&aweme_id=%d&filtering=%s&cursor=%d&count=%d",
+			conf.API_FILE_VIDEO_AWEME_GET, req.AdvertiserId, req.AwemeId, string(filtering), req.Cursor, req.Count), header, nil)
 	return res, err
 }
