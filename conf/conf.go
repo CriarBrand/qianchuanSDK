@@ -115,4 +115,31 @@ const (
 
 	// API_FILE_VIDEO_AWEME_GET 获取抖音号下的视频
 	API_FILE_VIDEO_AWEME_GET = "/open_api/v1.0/qianchuan/file/video/aweme/get/"
+
+	// API_TOOLS_INDUSTRY_GET 获取行业列表
+	API_TOOLS_INDUSTRY_GET = "/open_api/2/tools/industry/get/"
+
+	// API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET 查询抖音类目下的推荐达人
+	API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET = "/open_api/2/tools/aweme_category_top_author/get/"
+
+	// API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET 查询抖音类目列表
+	API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET = "/open_api/2/tools/aweme_multi_level_category/get/"
+
+	// API_INTEREST_ACTION_ACTION_CATEGORY 行为类目查询
+	API_INTEREST_ACTION_ACTION_CATEGORY = "/open_api/2/tools/interest_action/action/category/"
+
+	// API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD 行为关键词查询
+	API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD = "/open_api/2/tools/interest_action/action/keyword/"
+
+	// API_TOOLS_INTEREST_ACTION_INTEREST_CATEGORY 兴趣类目查询
+	API_TOOLS_INTEREST_ACTION_INTEREST_CATEGORY = "/open_api/2/tools/interest_action/interest/category/"
+
+	// API_TOOLS_INTEREST_ACTION_INTEREST_KEYWORD 兴趣关键词查询
+	API_TOOLS_INTEREST_ACTION_INTEREST_KEYWORD = "/open_api/2/tools/interest_action/interest/keyword/"
+
+	// API_TOOLS_CREATIVE_WORD_SELECT 查询动态创意词包
+	API_TOOLS_CREATIVE_WORD_SELECT = "/open_api/2/tools/creative_word/select/"
+
+	// API_DMP_AUDIENCES_GET 查询人群包列表
+	API_DMP_AUDIENCES_GET = "/open_api/v1.0/qianchuan/dmp/audiences/get/"
 )

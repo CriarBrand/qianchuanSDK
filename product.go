@@ -23,7 +23,7 @@ type ProductAvailableGetReq struct {
 type ProductAvailableGetRes struct {
 	QCError
 	Data struct {
-		PageInfo
+		PageInfo    PageInfo   `json:"page_info"`
 		ProductList []struct { //商品列表
 			CategoryName  string  `json:"category_name"`  //分类
 			DiscountPrice float64 `json:"discount_price"` //售价，单位：元
@@ -64,7 +64,7 @@ type AwemeAuthorizedGetReq struct {
 type AwemeAuthorizedGetRes struct {
 	QCError
 	Data struct {
-		PageInfo
+		PageInfo    PageInfo   `json:"page_info"`
 		AwemeIdList []struct { //抖音号列表
 			AwemeAvatar string   `json:"aweme_avatar"`  //抖音头像
 			AwemeId     int64    `json:"aweme_id"`      //抖音id，用于创建计划，拉取抖音号视频素材时入参
