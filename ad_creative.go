@@ -14,12 +14,13 @@ import (
 
 // CreativeStatusUpdateReq 更新创意状态 的 请求结构体
 type CreativeStatusUpdateReq struct {
-	AccessToken string `json:"access_token"`
-	Body        struct {
-		AdvertiserId int64   `json:"advertiser_id"`
-		OptStatus    string  `json:"opt_status"`
-		CreativeIds  []int64 `json:"creative_ids"`
-	} `json:"body"`
+	AccessToken string                      `json:"access_token"`
+	Body        CreativeStatusUpdateReqBody `json:"body"`
+}
+type CreativeStatusUpdateReqBody struct {
+	AdvertiserId int64   `json:"advertiser_id"`
+	OptStatus    string  `json:"opt_status"`
+	CreativeIds  []int64 `json:"creative_ids"`
 }
 
 // CreativeStatusUpdateRes 更新创意状态 的 响应结构体
@@ -47,21 +48,22 @@ func (m *Manager) CreativeStatusUpdate(req CreativeStatusUpdateReq) (res *Creati
 
 // CreativeGetReq 获取账户下创意列表 的 请求结构体
 type CreativeGetReq struct {
-	AccessToken  string   `json:"access_token"`
-	AdvertiserId int64    `json:"advertiser_id"` //千川广告账户ID
-	Filtering    struct { //过滤条件
-		AdIds                   []int64 `json:"ad_ids"`                     //按计划ID过滤，list长度限制 1-100
-		CreativeId              int64   `json:"creative_id"`                //按创意ID过滤
-		CreativeMaterialMode    string  `json:"creative_material_mode"`     //按创意呈现方式过滤，允许值： CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
-		Status                  string  `json:"status"`                     //按创意状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-创意查询状态】
-		MarketingGoal           string  `json:"marketing_goal"`             //按营销目标过滤，允许值：VIDEO_PROM_GOODS 短视频带货、LIVE_PROM_GOODS 直播带货
-		CampaignId              int64   `json:"campaign_id"`                //按广告组ID过滤
-		CreativeCreateStartDate string  `json:"creative_create_start_date"` //创意创建开始时间，格式："yyyy-mm-dd"
-		CreativeCreateEndDate   string  `json:"creative_create_end_date"`   //创意创建结束时间，与creative_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
-		CreativeModifyTime      string  `json:"creative_modify_time"`       //创意修改时间，格式："yyyy-mm-dd HH"
-	} `json:"filtering"`
-	Page     int64 `json:"page"`      //页码，默认值：1
-	PageSize int64 `json:"page_size"` //页面大小，允许值：10, 20, 50, 100, 500, 1000，默认值：10
+	AccessToken  string                  `json:"access_token"`
+	AdvertiserId int64                   `json:"advertiser_id"` //千川广告账户ID
+	Filtering    CreativeGetReqFiltering `json:"filtering"`
+	Page         int64                   `json:"page"`      //页码，默认值：1
+	PageSize     int64                   `json:"page_size"` //页面大小，允许值：10, 20, 50, 100, 500, 1000，默认值：10
+}
+type CreativeGetReqFiltering struct {
+	AdIds                   []int64 `json:"ad_ids"`                     //按计划ID过滤，list长度限制 1-100
+	CreativeId              int64   `json:"creative_id"`                //按创意ID过滤
+	CreativeMaterialMode    string  `json:"creative_material_mode"`     //按创意呈现方式过滤，允许值： CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
+	Status                  string  `json:"status"`                     //按创意状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-创意查询状态】
+	MarketingGoal           string  `json:"marketing_goal"`             //按营销目标过滤，允许值：VIDEO_PROM_GOODS 短视频带货、LIVE_PROM_GOODS 直播带货
+	CampaignId              int64   `json:"campaign_id"`                //按广告组ID过滤
+	CreativeCreateStartDate string  `json:"creative_create_start_date"` //创意创建开始时间，格式："yyyy-mm-dd"
+	CreativeCreateEndDate   string  `json:"creative_create_end_date"`   //创意创建结束时间，与creative_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
+	CreativeModifyTime      string  `json:"creative_modify_time"`       //创意修改时间，格式："yyyy-mm-dd HH"
 }
 
 // CreativeGetRes 获取账户下创意列表 的 响应结构体
