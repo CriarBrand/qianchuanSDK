@@ -1,3 +1,6 @@
+// 通过接口上传/获取广告投放流程中必须的 图片/视频 等创意素材API
+// 巨量开放平台地址：https://open.oceanengine.com/doc/index.html?key=qianchuan&type=api&id=1697466636262411
+
 package qianchuanSDK
 
 import (
