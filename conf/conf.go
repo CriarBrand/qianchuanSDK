@@ -41,14 +41,14 @@ const (
 	// API_ADVERTISER_INFO 获取千川广告账户全量信息
 	API_ADVERTISER_INFO = "/open_api/2/advertiser/info/"
 
-	// API_ADVERTISER_REPORT 获取广告账户数据
-	API_ADVERTISER_REPORT = "/open_api/v1.0/qianchuan/report/advertiser/get/"
+	// API_REPORT_ADVERTISER_GET 获取广告账户数据
+	API_REPORT_ADVERTISER_GET = "/open_api/v1.0/qianchuan/report/advertiser/get/"
 
-	// API_AD_REPORT 获取广告计划数据
-	API_AD_REPORT = "/open_api/v1.0/qianchuan/report/ad/get/"
+	// API_REPORT_AD_GET 获取广告计划数据
+	API_REPORT_AD_GET = "/open_api/v1.0/qianchuan/report/ad/get/"
 
-	// API_creative_REPORT 获取广告创意数据
-	API_creative_REPORT = "/open_api/v1.0/qianchuan/report/creative/get/"
+	// API_REPORT_CREATIVE_GET 获取广告创意数据
+	API_REPORT_CREATIVE_GET = "/open_api/v1.0/qianchuan/report/creative/get/"
 
 	// API_CAMPAIGN_CREATE 广告组创建
 	API_CAMPAIGN_CREATE = "/open_api/v1.0/qianchuan/campaign/create/"
@@ -86,16 +86,16 @@ const (
 	// API_AD_REJECT_REASON 获取计划审核建议
 	API_AD_REJECT_REASON = "/open_api/v1.0/qianchuan/ad/reject_reason/"
 
-	// API_AD_CREATIVE_UPDATE 更新创意状态
-	API_AD_CREATIVE_UPDATE = "/open_api/v1.0/qianchuan/creative/status/update/"
+	// API_CREATIVE_STATUS_UPDATE 更新创意状态
+	API_CREATIVE_STATUS_UPDATE = "/open_api/v1.0/qianchuan/creative/status/update/"
 
-	// API_AD_CREATIVE_GET 获取账户下创意列表
-	API_AD_CREATIVE_GET = "/open_api/v1.0/qianchuan/creative/get/"
+	// API_CREATIVE_GET 获取账户下创意列表
+	API_CREATIVE_GET = "/open_api/v1.0/qianchuan/creative/get/"
 
-	// API_AD_CREATIVE_REJECT 获取创意审核建议
-	API_AD_CREATIVE_REJECT = "/open_api/v1.0/qianchuan/creative/reject_reason/"
+	// API_CREATIVE_REJECT_REASON 获取创意审核建议
+	API_CREATIVE_REJECT_REASON = "/open_api/v1.0/qianchuan/creative/reject_reason/"
 
-	// API_PRODUCT_AVAILABLE_GET 获取千川账户下可投商品列表接口
+	// API_PRODUCT_AVAILABLE_GET 获取可投商品列表接口
 	API_PRODUCT_AVAILABLE_GET = "/open_api/v1.0/qianchuan/product/available/get/"
 
 	// API_AWEME_AUTHORIZED_GET 获取千川账户下已授权抖音号

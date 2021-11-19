@@ -95,7 +95,7 @@ func (r Client) DoRequestWithJson(ctx context.Context, method, reqUrl string, he
 			return
 		}
 	}
-
+	fmt.Printf("%+v\n", string(reqBody))
 	if headers == nil {
 		headers = http.Header{}
 	}

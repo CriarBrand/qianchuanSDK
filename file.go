@@ -21,12 +21,12 @@ type FileImageAdReq struct {
 	Body        FileImageAdReqBody `json:"body"`
 }
 type FileImageAdReqBody struct {
-	AdvertiserId   int64     `json:"advertiser_id"`
-	UploadType     string    `json:"upload_type"`
-	ImageSignature string    `json:"image_signature"`
-	ImageFile      io.Reader `json:"image_file"`
-	ImageUrl       string    `json:"image_url"`
-	Filename       string    `json:"filename"`
+	AdvertiserId   int64     `json:"advertiser_id,omitempty"`
+	UploadType     string    `json:"upload_type,omitempty"`
+	ImageSignature string    `json:"image_signature,omitempty"`
+	ImageFile      io.Reader `json:"image_file,omitempty"`
+	ImageUrl       string    `json:"image_url,omitempty"`
+	Filename       string    `json:"filename,omitempty"`
 }
 
 // FileImageAdRes 上传图片素材 的 响应结构体
@@ -46,48 +46,55 @@ type FileImageAdRes struct {
 
 // FileImageAd 上传图片素材
 func (m *Manager) FileImageAd(req FileImageAdReq) (res *FileImageAdRes, err error) {
-	var (
-		HttpClient = &http.Client{}
-	)
+	if req.Body.UploadType == "UPLOAD_BY_URL" {
+		header := http.Header{}
+		header.Add("Access-Token", req.AccessToken)
+		err = m.client.CallWithJson(context.Background(), &res, "POST",
+			m.url("%s?", conf.API_FILE_IMAGE_AD), header, req.Body)
+		return res, err
+	} else {
+		var (
+			HttpClient = &http.Client{}
+		)
+		body := new(bytes.Buffer)
+		writer := multipart.NewWriter(body)
+		formFile, err := writer.CreateFormFile("image_file", req.Body.Filename)
+		if err != nil {
+			return nil, err
+		}
+		_, err = io.Copy(formFile, req.Body.ImageFile)
+		if err != nil {
+			return nil, err
+		}
+		_ = writer.WriteField("advertiser_id", strconv.Itoa(int(req.Body.AdvertiserId)))
+		_ = writer.WriteField("upload_type", req.Body.UploadType)
+		_ = writer.WriteField("image_signature", req.Body.ImageSignature)
+		_ = writer.WriteField("image_url", req.Body.ImageUrl)
+		_ = writer.WriteField("filename", req.Body.Filename)
 
-	body := new(bytes.Buffer)
-	writer := multipart.NewWriter(body)
-	formFile, err := writer.CreateFormFile("image_file", req.Body.Filename)
-	if err != nil {
-		return nil, err
-	}
-	_, err = io.Copy(formFile, req.Body.ImageFile)
-	if err != nil {
-		return nil, err
-	}
-	_ = writer.WriteField("advertiser_id", strconv.Itoa(int(req.Body.AdvertiserId)))
-	_ = writer.WriteField("upload_type", req.Body.UploadType)
-	_ = writer.WriteField("image_signature", req.Body.ImageSignature)
-	_ = writer.WriteField("image_url", req.Body.ImageUrl)
-	_ = writer.WriteField("filename", req.Body.Filename)
+		request, err := http.NewRequest("POST", conf.API_FILE_IMAGE_AD, body)
+		if err != nil {
+			return nil, err
+		}
+		request.Header.Add("Access-Token", req.AccessToken)
+		request.Header.Add("Content-Type", writer.FormDataContentType())
 
-	request, err := http.NewRequest("POST", conf.API_FILE_IMAGE_AD, body)
-	if err != nil {
-		return nil, err
+		resp, err := HttpClient.Do(request)
+		if err != nil {
+			fmt.Println("resp err: ", err)
+			return nil, err
+		}
+		defer resp.Body.Close()
+		respData, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			return nil, err
+		}
+		err = json.Unmarshal(respData, res)
+		if err != nil {
+			return nil, err
+		}
+		return res, err
 	}
-	request.Header.Add("Access-Token", req.AccessToken)
-	request.Header.Add("Content-Type", writer.FormDataContentType())
-
-	resp, err := HttpClient.Do(request)
-	if err != nil {
-		fmt.Println("resp err: ", err)
-		return nil, err
-	}
-	defer resp.Body.Close()
-	respData, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	err = json.Unmarshal(respData, res)
-	if err != nil {
-		return nil, err
-	}
-	return res, err
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -165,20 +172,20 @@ func (m *Manager) FileVideoAd(req FileVideoAdReq) (res *FileVideoAdRes, err erro
 // FileImageGetReq 获取素材库的图片 的 请求结构体
 type FileImageGetReq struct {
 	AccessToken  string                   // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	AdvertiserId int64                    // 千川广告账户ID
-	Filtering    FileImageGetReqFiltering `json:"filtering"`
-	Page         int64                    `json:"page"`
-	PageSize     int64                    `json:"page_size"`
+	AdvertiserId int64                    `json:"advertiser_id"` // 千川广告账户ID
+	Filtering    FileImageGetReqFiltering `json:"filtering,omitempty"`
+	Page         int64                    `json:"page,omitempty"`
+	PageSize     int64                    `json:"page_size,omitempty"`
 }
 type FileImageGetReqFiltering struct {
-	ImageIds    []string  `json:"image_ids"`    //图片ids，可以根据图片ids（创意中使用的图片key，存在一张图片对应多个image_ids的情况）进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
-	MaterialIds []int64   `json:"material_ids"` //素材id列表，可以根据material_ids（素材报表使用的id，一个素材唯一对应一个素材id）进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
-	Signatures  []string  `json:"signatures"`   //md5值列表，可以根据素材的md5进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
-	Width       int64     `json:"width"`        //图片宽度
-	Height      int64     `json:"height"`       //图片高度
-	Ratio       []float64 `json:"ratio"`        //图片宽高比，eg: [1.7, 2.5]，输入1.7则搜索满足宽高比介于1.65-1.75之间的图片，即精度上下浮动0.05
-	StartTime   string    `json:"start_time"`   //根据视频上传时间进行过滤的起始时间，与end_time搭配使用，格式：yyyy-mm-dd
-	EndTime     string    `json:"end_time"`     //根据视频上传时间进行过滤的截止时间，与start_time搭配使用，格式：yyyy-mm-dd
+	ImageIds    []string  `json:"image_ids,omitempty"`    //图片ids，可以根据图片ids（创意中使用的图片key，存在一张图片对应多个image_ids的情况）进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
+	MaterialIds []int64   `json:"material_ids,omitempty"` //素材id列表，可以根据material_ids（素材报表使用的id，一个素材唯一对应一个素材id）进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
+	Signatures  []string  `json:"signatures,omitempty"`   //md5值列表，可以根据素材的md5进行过滤 数量限制：<=100 注意：image_ids、material_ids、signatures只能选择一个进行过滤
+	Width       int64     `json:"width,omitempty"`        //图片宽度
+	Height      int64     `json:"height,omitempty"`       //图片高度
+	Ratio       []float64 `json:"ratio,omitempty"`        //图片宽高比，eg: [1.7, 2.5]，输入1.7则搜索满足宽高比介于1.65-1.75之间的图片，即精度上下浮动0.05
+	StartTime   string    `json:"start_time,omitempty"`   //根据视频上传时间进行过滤的起始时间，与end_time搭配使用，格式：yyyy-mm-dd
+	EndTime     string    `json:"end_time,omitempty"`     //根据视频上传时间进行过滤的截止时间，与start_time搭配使用，格式：yyyy-mm-dd
 }
 
 // FileImageGetRes 获取素材库的图片 的 响应结构体
@@ -221,20 +228,20 @@ func (m *Manager) FileImageGet(req FileImageGetReq) (res *FileImageGetRes, err e
 // FileVideoGetReq 获取素材库的视频 的 请求结构体
 type FileVideoGetReq struct {
 	AccessToken  string                   // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	AdvertiserId int64                    // 千川广告账户ID
-	Filtering    FileVideoGetReqFiltering `json:"filtering"`
-	Page         int64                    `json:"page"`
-	PageSize     int64                    `json:"page_size"`
+	AdvertiserId int64                    `json:"advertiser_id"` // 千川广告账户ID
+	Filtering    FileVideoGetReqFiltering `json:"filtering,omitempty"`
+	Page         int64                    `json:"page,omitempty"`
+	PageSize     int64                    `json:"page_size,omitempty"`
 }
 type FileVideoGetReqFiltering struct {
-	Width       int64     `json:"width"`        //视频宽度
-	Height      int64     `json:"height"`       //视频高度
-	Ratio       []float64 `json:"ratio"`        //视频宽高比，示例: [1.7, 2.5] 输入1.7则搜索满足宽高比介于1.65-1.75之间的视频，即精度上下浮动0.5
-	VideoIds    []string  `json:"video_ids"`    //视频ids，示例: ["86adb23eaa21229fc04ef932b5089bb8"] 数量限制：<=100 注意：video_ids、material_ids、signatures只能选择一个进行过滤
-	MaterialIds []int64   `json:"material_ids"` //素材id列表，可以根据material_ids（素材报表使用的id，一个素材唯一对应一个素材id）进行过滤 数量限制：<=100 注意：video_ids、material_ids、signatures只能选择一个进行过滤
-	Signatures  []string  `json:"signatures"`   //md5值列表，可以根据素材的md5进行过滤 数量限制：<=100 注意：video_ids、material_ids、signatures只能选择一个进行过滤
-	StartTime   string    `json:"start_time"`   //根据视频上传时间进行过滤的起始时间，与end_time搭配使用，格式：yyyy-mm-dd
-	EndTime     string    `json:"end_time"`     //根据视频上传时间进行过滤的截止时间，与start_time搭配使用，格式：yyyy-mm-dd
+	Width       int64     `json:"width,omitempty"`        //视频宽度
+	Height      int64     `json:"height,omitempty"`       //视频高度
+	Ratio       []float64 `json:"ratio,omitempty"`        //视频宽高比，示例: [1.7, 2.5] 输入1.7则搜索满足宽高比介于1.65-1.75之间的视频，即精度上下浮动0.5
+	VideoIds    []string  `json:"video_ids,omitempty"`    //视频ids，示例: ["86adb23eaa21229fc04ef932b5089bb8"] 数量限制：<=100 注意：video_ids、material_ids、signatures只能选择一个进行过滤
+	MaterialIds []int64   `json:"material_ids,omitempty"` //素材id列表，可以根据material_ids（素材报表使用的id，一个素材唯一对应一个素材id）进行过滤 数量限制：<=100 注意：video_ids、material_ids、signatures只能选择一个进行过滤
+	Signatures  []string  `json:"signatures,omitempty"`   //md5值列表，可以根据素材的md5进行过滤 数量限制：<=100 注意：video_ids、material_ids、signatures只能选择一个进行过滤
+	StartTime   string    `json:"start_time,omitempty"`   //根据视频上传时间进行过滤的起始时间，与end_time搭配使用，格式：yyyy-mm-dd
+	EndTime     string    `json:"end_time,omitempty"`     //根据视频上传时间进行过滤的截止时间，与start_time搭配使用，格式：yyyy-mm-dd
 }
 
 // FileVideoGetRes 获取素材库的视频 的 响应结构体
@@ -284,12 +291,12 @@ type FileVideoAwemeGetReq struct {
 	AccessToken  string                        `json:"access_token"`  // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	AdvertiserId int64                         `json:"advertiser_id"` // 千川广告账户ID
 	AwemeId      int64                         `json:"aweme_id"`      // 需拉取视频的抖音号
-	Filtering    FileVideoAwemeGetReqFiltering `json:"filtering"`
-	Cursor       int64                         `json:"cursor"`
-	Count        int64                         `json:"count"`
+	Filtering    FileVideoAwemeGetReqFiltering `json:"filtering,omitempty"`
+	Cursor       int64                         `json:"cursor,omitempty"`
+	Count        int64                         `json:"count,omitempty"`
 }
 type FileVideoAwemeGetReqFiltering struct {
-	ProductId int64 `json:"product_id"` //商品ID，查询关联商品的相应视频，仅短视频带货场景需入参
+	ProductId int64 `json:"product_id,omitempty"` //商品ID，查询关联商品的相应视频，仅短视频带货场景需入参
 }
 
 // FileVideoAwemeGetRes 获取抖音号下的视频 的 响应结构体

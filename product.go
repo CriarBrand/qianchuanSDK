@@ -14,9 +14,14 @@ import (
 // ProductAvailableGetReq 获取可投商品列表接口 的 请求结构体
 type ProductAvailableGetReq struct {
 	AccessToken  string `json:"access_token"`
-	AdvertiserId int64  `json:"advertiser_id"`
-	Page         int64  `json:"page"`
-	PageSize     int64  `json:"page_size"`
+	AdvertiserId int64  `json:"advertiser_id,omitempty"`
+	Filter       ProductAvailableGetFilter
+	Page         int64 `json:"page,omitempty"`
+	PageSize     int64 `json:"page_size,omitempty"`
+}
+type ProductAvailableGetFilter struct {
+	ProductIds  []string `json:"access_token,omitempty"`
+	ProductName string   `json:"product_name,omitempty"`
 }
 
 // ProductAvailableGetRes 获取可投商品列表接口 的 响应结构体
@@ -55,9 +60,9 @@ func (m *Manager) ProductAvailableGet(req ProductAvailableGetReq) (res *ProductA
 // AwemeAuthorizedGetReq 获取千川账户下已授权抖音号 的 请求结构体
 type AwemeAuthorizedGetReq struct {
 	AccessToken  string `json:"access_token"`
-	AdvertiserId int64  `json:"advertiser_id"`
-	Page         int64  `json:"page"`
-	PageSize     int64  `json:"page_size"`
+	AdvertiserId int64  `json:"advertiser_id,omitempty"`
+	Page         int64  `json:"page,omitempty"`
+	PageSize     int64  `json:"page_size,omitempty"`
 }
 
 // AwemeAuthorizedGetRes 获取千川账户下已授权抖音号 的 响应结构体

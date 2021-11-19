@@ -6,6 +6,7 @@ package qianchuanSDK
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/CriarBrand/qianchuanSDK/conf"
 	"net/http"
 )
@@ -23,7 +24,7 @@ type AdCreateBody struct {
 	Name            string                  `json:"name"`                    // 计划名称，长度为1-100个字符，其中1个汉字算2位字符。名称不可重复，否则会报错
 	CampaignId      int64                   `json:"campaign_id"`             // 千川广告组id
 	AwemeId         int64                   `json:"aweme_id"`
-	ProductIds      []int64                 `json:"product_ids"`
+	ProductIds      []int64                 `json:"product_ids,omitempty"`
 	DeliverySetting AdCreateDeliverySetting `json:"delivery_setting"`
 	Audience        AdCreateAudience        `json:"audience"`
 	AdCreateCreative
@@ -72,26 +73,26 @@ type AdCreateAudience struct {
 }
 
 type AdCreateCreative struct {
-	CreativeMaterialMode          string                                `json:"creative_material_mode"`                     // 创意呈现方式，允许值：CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
-	FirstIndustryMode             int64                                 `json:"first_industry_mode"`                        // 创意一级行业ID。可从【获取行业列表】接口获取
-	SecondIndustryId              int64                                 `json:"second_industry_id"`                         // 创意二级行业ID。可从【获取行业列表】接口获取
-	ThirdIndustryId               int64                                 `json:"third_industry_id"`                          // 创意三级行业ID。可从【获取行业列表】接口获取
-	AdKeywords                    []string                              `json:"ad_keywords,omitempty"`                      // 创意标签。最多20个标签，且每个标签长度要求为1~20个字符，汉字算2个字符
-	CreativeList                  []AdCreateCreativeList                `json:"creative_list,omitempty"`                    // 自定义素材信息
-	CreativeAutoGenerate          int64                                 `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
-	ProgrammaticCreativeMediaList AdCreateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
-	ProgrammaticCreativeTitleList AdCreateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
-	ProgrammaticCreativeCard      AdCreateProgrammaticCreativeCard      `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
-	IsHomepageHide                int64                                 `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
+	CreativeMaterialMode          string                                  `json:"creative_material_mode"`                     // 创意呈现方式，允许值：CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
+	FirstIndustryId               int64                                   `json:"first_industry_id"`                          // 创意一级行业ID。可从【获取行业列表】接口获取
+	SecondIndustryId              int64                                   `json:"second_industry_id"`                         // 创意二级行业ID。可从【获取行业列表】接口获取
+	ThirdIndustryId               int64                                   `json:"third_industry_id"`                          // 创意三级行业ID。可从【获取行业列表】接口获取
+	AdKeywords                    []string                                `json:"ad_keywords,omitempty"`                      // 创意标签。最多20个标签，且每个标签长度要求为1~20个字符，汉字算2个字符
+	CreativeList                  []AdCreateCreativeList                  `json:"creative_list,omitempty"`                    // 自定义素材信息
+	CreativeAutoGenerate          int64                                   `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
+	ProgrammaticCreativeMediaList []AdCreateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
+	ProgrammaticCreativeTitleList []AdCreateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
+	ProgrammaticCreativeCard      *AdCreateProgrammaticCreativeCard       `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
+	IsHomepageHide                int64                                   `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
 }
 
 // AdCreateCreativeList 广告创意 - creative_list
 type AdCreateCreativeList struct {
-	ImageMode             string                        `json:"image_mode,omitempty"`              // 创意素材类型
-	VideoMaterial         AdCreateCustomVideoMaterial   `json:"video_material,omitempty"`          // 视频类型素材
-	ImageMaterial         AdCreateImageMaterial         `json:"image_material,omitempty"`          // 图片类型素材
-	TitleMaterial         AdCreateTitleMaterial         `json:"title_material,omitempty"`          // 标题类型素材，若选择了抖音号上的视频，不支持修改标题
-	PromotionCardMaterial AdCreatePromotionCardMaterial `json:"promotion_card_material,omitempty"` // 推广卡片素材
+	ImageMode             string                         `json:"image_mode,omitempty"`              // 创意素材类型
+	VideoMaterial         *AdCreateCustomVideoMaterial   `json:"video_material,omitempty"`          // 视频类型素材
+	ImageMaterial         *AdCreateImageMaterial         `json:"image_material,omitempty"`          // 图片类型素材
+	TitleMaterial         *AdCreateTitleMaterial         `json:"title_material,omitempty"`          // 标题类型素材，若选择了抖音号上的视频，不支持修改标题
+	PromotionCardMaterial *AdCreatePromotionCardMaterial `json:"promotion_card_material,omitempty"` // 推广卡片素材
 }
 
 // AdCreateCustomVideoMaterial 广告创意 - 视频类型素材
@@ -162,6 +163,11 @@ type AdCreateRes struct {
 
 // AdCreate 创建计划（含创意生成规则）
 func (m *Manager) AdCreate(req AdCreateReq) (res *AdCreateRes, err error) {
+	marshal, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("%+v\n", string(marshal))
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	err = m.client.CallWithJson(context.Background(), &res, "POST",
@@ -180,9 +186,9 @@ type AdUpdateReq struct {
 type AdUpdateBody struct {
 	AdvertiserId    int64                   `json:"advertiser_id"` // 千川广告主账户id
 	AdId            int64                   `json:"ad_id"`
-	Name            string                  `json:"name"` // 计划名称，长度为1-100个字符，其中1个汉字算2位字符。名称不可重复，否则会报错
+	Name            string                  `json:"name,omitempty"` // 计划名称，长度为1-100个字符，其中1个汉字算2位字符。名称不可重复，否则会报错
 	DeliverySetting AdUpdateDeliverySetting `json:"delivery_setting"`
-	Audience        AdUpdateAudience        `json:"audience"`
+	Audience        *AdUpdateAudience       `json:"audience,omitempty"`
 	AdUpdateCreative
 }
 
@@ -193,39 +199,42 @@ type AdUpdateDeliverySetting struct {
 	Budget             float64 `json:"budget"`                         // 预算，最多支持两位小数当预算模式为日预算时，预算范围是300 - 9999999.99；当预算模式为总预算时，预算范围是max(300,投放天数x100) - 9999999.99
 	CpaBid             float64 `json:"cpa_bid,omitempty"`              // 转化出价，出价不能大于预算仅当 smart_bid_type 为SMART_BID_CUSTOM 时需传值
 	VideoScheduleType  string  `json:"video_schedule_type,omitempty"`  // 短视频投放日期选择方式，仅短视频带货场景需入参，允许值：SCHEDULE_FROM_NOW 从今天起长期投放（总预算模式下不支持）、SCHEDULE_START_END 设置开始和结束日期
+	LiveScheduleType   string  `json:"live_schedule_type,omitempty"`   // 直播间投放时段选择方式， 仅直播带货场景需入参，允许值：SCHEDULE_FROM_NOW 从今天起长期投放、SCHEDULE_START_END 设置开始和结束日期、SCHEDULE_TIME_FIXEDRANGE 固定时长，在保持原枚举之外，只允许SCHEDULE_FROM_NOW切换为SCHEDULE_START_END ，不允许SCHEDULE_START_END 切换为SCHEDULE_FROM_NOW
 	EndTime            string  `json:"end_time,omitempty"`             // 投放结束时间，形式如：2017-01-01结束时间不能比起始时间早。当video_schedule_type为SCHEDULE_START_END 设置开始和结束日期时需传入。当live_schedule_type 为SCHEDULE_TIME_ALLDAY 全天、SCHEDULE_TIME_WEEKLY_SETTING 指定时间段时必填；当 live_schedule_type 为SCHEDULE_TIME_FIXEDRANGE固定时长时不能传入
 	ScheduleTime       string  `json:"schedule_time,omitempty"`        // 投放时段，当 live_schedule_type 为SCHEDULE_TIME_WEEKLY_SETTING 时生效默认全时段投放，格式是48*7位字符串，且都是0或1。也就是以半个小时为最小粒度，周一至周日每天分为48个区段，0为不投放，1为投放，不传、全传0、全传1均代表全时段投放。例如：填写"000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000000000000000000000000001111000000000000000000000"，则投放时段为周一到周日的11:30~13:30
 	ScheduleFixedRange int64   `json:"schedule_fixed_range,omitempty"` // 固定投放时长当 live_schedule_type 为 SCHEDULE_TIME_FIXEDRANGE 时必填；当live_schedule_type 为SCHEDULE_TIME_ALLDAY 全天、SCHEDULE_TIME_WEEKLY_SETTING 指定时间段时不能传入。单位为秒，最小值为1800（0.5小时），最大值为48*1800（24小时），值必须为1800倍数，不然会报错
 }
 
 type AdUpdateCreative struct {
-	CreativeMaterialMode          string                                `json:"creative_material_mode"`                     // 创意呈现方式，允许值：CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
-	FirstIndustryMode             int64                                 `json:"first_industry_mode"`                        // 创意一级行业ID。可从【获取行业列表】接口获取
-	SecondIndustryId              int64                                 `json:"second_industry_id"`                         // 创意二级行业ID。可从【获取行业列表】接口获取
-	ThirdIndustryId               int64                                 `json:"third_industry_id"`                          // 创意三级行业ID。可从【获取行业列表】接口获取
-	AdKeywords                    []string                              `json:"ad_keywords,omitempty"`                      // 创意标签。最多20个标签，且每个标签长度要求为1~20个字符，汉字算2个字符
-	CreativeList                  []AdUpdateCreativeList                `json:"creative_list,omitempty"`                    // 自定义素材信息
-	CreativeAutoGenerate          int64                                 `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
-	ProgrammaticCreativeMediaList AdUpdateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
-	ProgrammaticCreativeTitleList AdUpdateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
-	ProgrammaticCreativeCard      AdUpdateProgrammaticCreativeCard      `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
-	IsHomepageHide                int64                                 `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
+	CreativeMaterialMode          string                                 `json:"creative_material_mode"`                     // 创意呈现方式，允许值：CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
+	FirstIndustryId               int64                                  `json:"first_industry_id"`                          // 创意一级行业ID。可从【获取行业列表】接口获取
+	SecondIndustryId              int64                                  `json:"second_industry_id"`                         // 创意二级行业ID。可从【获取行业列表】接口获取
+	ThirdIndustryId               int64                                  `json:"third_industry_id"`                          // 创意三级行业ID。可从【获取行业列表】接口获取
+	AdKeywords                    []string                               `json:"ad_keywords,omitempty"`                      // 创意标签。最多20个标签，且每个标签长度要求为1~20个字符，汉字算2个字符
+	CreativeList                  []AdUpdateCreativeList                 `json:"creative_list,omitempty"`                    // 自定义素材信息
+	CreativeAutoGenerate          int64                                  `json:"creative_auto_generate,omitempty"`           // 是否开启「生成更多创意」
+	ProgrammaticCreativeMediaList *AdUpdateProgrammaticCreativeMediaList `json:"programmatic_creative_media_list,omitempty"` // 程序化创意素材信息
+	ProgrammaticCreativeTitleList *AdUpdateProgrammaticCreativeTitleList `json:"programmatic_creative_title_list,omitempty"` // 程序化创意标题信息
+	ProgrammaticCreativeCard      *AdUpdateProgrammaticCreativeCard      `json:"programmatic_creative_card,omitempty"`       // 程序化创意推广卡片信息
+	IsHomepageHide                int64                                  `json:"is_homepage_hide,omitempty"`                 // 抖音主页是否隐藏视频
 }
 
 // AdUpdateCreativeList 广告创意 - creative_list
 type AdUpdateCreativeList struct {
-	CreativeId            int64                         `json:"creative_id"`                       // 创意ID
-	ImageMode             string                        `json:"image_mode,omitempty"`              // 创意素材类型
-	VideoMaterial         AdUpdateCustomVideoMaterial   `json:"video_material,omitempty"`          // 视频类型素材
-	ImageMaterial         AdUpdateImageMaterial         `json:"image_material,omitempty"`          // 图片类型素材
-	TitleMaterial         AdUpdateTitleMaterial         `json:"title_material,omitempty"`          // 标题类型素材，若选择了抖音号上的视频，不支持修改标题
-	PromotionCardMaterial AdUpdatePromotionCardMaterial `json:"promotion_card_material,omitempty"` // 推广卡片素材
+	CreativeId            int64                          `json:"creative_id"`                       // 创意ID
+	ImageMode             string                         `json:"image_mode,omitempty"`              // 创意素材类型
+	VideoMaterial         *AdUpdateCustomVideoMaterial   `json:"video_material,omitempty"`          // 视频类型素材
+	ImageMaterial         *AdUpdateImageMaterial         `json:"image_material,omitempty"`          // 图片类型素材
+	TitleMaterial         *AdUpdateTitleMaterial         `json:"title_material,omitempty"`          // 标题类型素材，若选择了抖音号上的视频，不支持修改标题
+	PromotionCardMaterial *AdUpdatePromotionCardMaterial `json:"promotion_card_material,omitempty"` // 推广卡片素材
 }
 
 // AdUpdateCustomVideoMaterial 广告创意 - 视频类型素材
 type AdUpdateCustomVideoMaterial struct {
-	ID int64 `json:"id,omitempty"`
-	AdCreateCustomVideoMaterial
+	ID           int64  `json:"id,omitempty"`
+	VideoId      string `json:"video_id,omitempty"`       // 视频ID
+	VideoCoverId string `json:"video_cover_id,omitempty"` // 视频封面ID
+	AwemeItemId  int64  `json:"aweme_item_id,omitempty"`  // 抖音视频ID
 }
 
 // AdUpdateImageMaterial 广告创意 - 图片类型素材
@@ -236,8 +245,9 @@ type AdUpdateImageMaterial struct {
 
 // AdUpdateTitleMaterial 广告创意 - 标题类型素材，若选择了抖音号上的视频，不支持修改标题
 type AdUpdateTitleMaterial struct {
-	ID int64 `json:"id,omitempty"`
-	AdCreateTitleMaterial
+	ID           int64                  `json:"id,omitempty"`
+	Title        string                 `json:"title,omitempty"`         // 创意标题
+	DynamicWords []AdCreateDynamicWords `json:"dynamic_words,omitempty"` // 动态词包对象列表
 }
 
 type AdUpdateDynamicWords AdCreateDynamicWords
@@ -288,12 +298,12 @@ func (m *Manager) AdUpdate(req AdUpdateReq) (res *AdUpdateRes, err error) {
 
 // AdListGetReq 获取账户下计划列表（不含创意）
 type AdListGetReq struct {
-	AdvertiserId     int64              // 千川广告账户ID
-	RequestAwemeInfo int64              // 是否包含抖音号信息，允许值：0：不包含；1：包含；默认不返回
-	Page             int64              // 页码，默认为1
-	PageSize         int64              // 页面大小，默认值: 10， 允许值：10、20、50、100、500、1000
-	Filtering        AdListGetFiltering // 过滤器，无过滤条件情况下返回“所有不包含已删除”的广告组列表
-	AccessToken      string             // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId     int64              `json:"advertiser_id"`                // 千川广告账户ID
+	RequestAwemeInfo int64              `json:"request_aweme_info,omitempty"` // 是否包含抖音号信息，允许值：0：不包含；1：包含；默认不返回
+	Page             int64              `json:"page,omitempty"`               // 页码，默认为1
+	PageSize         int64              `json:"page_size,omitempty"`          // 页面大小，默认值: 10， 允许值：10、20、50、100、500、1000
+	Filtering        AdListGetFiltering `json:"filtering"`                    // 过滤器，无过滤条件情况下返回“所有不包含已删除”的广告组列表
+	AccessToken      string             `json:"access_token"`                 // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
 type AdListGetFiltering struct {
