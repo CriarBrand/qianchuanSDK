@@ -108,7 +108,7 @@ type FileVideoAdReqBody struct {
 	AdvertiserId   int64     `json:"advertiser_id"`
 	VideoSignature string    `json:"video_signature"`
 	VideoFile      io.Reader `json:"video_file"`
-	VideoName      string    `json:"-"`
+	VideoName      string    `json:"filename"`
 }
 
 // FileVideoAdRes 上传视频素材 的 响应结构体

@@ -300,6 +300,7 @@ func (m *Manager) AdUpdate(req AdUpdateReq) (res *AdUpdateRes, err error) {
 type AdListGetReq struct {
 	AdvertiserId     int64              `json:"advertiser_id"`                // 千川广告账户ID
 	RequestAwemeInfo int64              `json:"request_aweme_info,omitempty"` // 是否包含抖音号信息，允许值：0：不包含；1：包含；默认不返回
+	AwemeId          int64              `json:"aweme_id,omitempty"`           // 按抖音号ID过滤
 	Page             int64              `json:"page,omitempty"`               // 页码，默认为1
 	PageSize         int64              `json:"page_size,omitempty"`          // 页面大小，默认值: 10， 允许值：10、20、50、100、500、1000
 	Filtering        AdListGetFiltering `json:"filtering"`                    // 过滤器，无过滤条件情况下返回“所有不包含已删除”的广告组列表
