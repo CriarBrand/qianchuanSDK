@@ -134,16 +134,17 @@ type CampaignListGetFilter struct {
 }
 
 type CampaignListGetResData struct {
-	List []struct {
-		ID            int64   `json:"id"`             // 广告组ID
-		Name          string  `json:"name"`           // 广告组名称
-		Budget        float64 `json:"budget"`         // 广告组预算，单位：元，精确到两位小数。
-		BudgetMode    string  `json:"budget_mode"`    // 广告组预算类型
-		MarketingGoal string  `json:"marketing_goal"` // 广告组营销目标，VIDEO_PROM_GOODS：短视频带货、LIVE_PROM_GOODS：直播带货。
-		Status        string  `json:"status"`         // 广告组状态，ALL：所有包含已删除、ENABLE：启用、DISABLE：暂停、DELETE：已删除。
-		CreateDate    string  `json:"create_date"`    // 广告组创建日期, 格式：yyyy-mm-dd
-	} `json:"list"`
-	PageInfo PageInfo `json:"page_info"`
+	List     []CampaignListGetResDataDetail `json:"list"`
+	PageInfo PageInfo                       `json:"page_info"`
+}
+type CampaignListGetResDataDetail struct {
+	ID            int64   `json:"id"`             // 广告组ID
+	Name          string  `json:"name"`           // 广告组名称
+	Budget        float64 `json:"budget"`         // 广告组预算，单位：元，精确到两位小数。
+	BudgetMode    string  `json:"budget_mode"`    // 广告组预算类型
+	MarketingGoal string  `json:"marketing_goal"` // 广告组营销目标，VIDEO_PROM_GOODS：短视频带货、LIVE_PROM_GOODS：直播带货。
+	Status        string  `json:"status"`         // 广告组状态，ALL：所有包含已删除、ENABLE：启用、DISABLE：暂停、DELETE：已删除。
+	CreateDate    string  `json:"create_date"`    // 广告组创建日期, 格式：yyyy-mm-dd
 }
 
 // CampaignListGetRes 获取广告账户数据-返回结构体
