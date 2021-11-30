@@ -319,40 +319,42 @@ type AdListGetFiltering struct {
 }
 
 type AdListGetResData struct {
-	List []struct {
-		AdId          int64  `json:"ad_id"`
-		CampaignId    int64  `json:"campaign_id"`
-		MarketingGoal string `json:"marketing_goal"`
-		PromotionWay  string `json:"promotion_way"`
-		Name          string `json:"name"`
-		Status        string `json:"status"`
-		OptStatus     string `json:"opt_status"`
-		AdCreateTime  string `json:"ad_create_time"`
-		AdModifyTime  string `json:"ad_modify_time"`
-		ProductInfo   []struct {
-			Id            int64   `json:"id"`
-			Name          string  `json:"name"`
-			DiscountPrice float64 `json:"discount_price"`
-			Img           string
-		} `json:"product_info"`
-		AwemeInfo []struct {
-			AwemeId     int64  `json:"aweme_id"`
-			AwemeName   string `json:"aweme_name"`
-			AwemeShowId string `json:"aweme_show_id"`
-			AwemeAvatar string `json:"aweme_avatar"`
-		} `json:"aweme_info"`
-		DeliverySetting struct {
-			SmartBidType   string  `json:"smart_bid_type"`
-			ExternalAction string  `json:"external_action"`
-			Budget         float64 `json:"budget"`
-			BudgetMode     string  `json:"budget_mode"`
-			CpaBid         float64 `json:"cpa_bid"`
-			StartTime      string  `json:"start_time"`
-			EndTime        string  `json:"end_time"`
-		} `json:"delivery_setting"`
-	} `json:"list"`
-	FailList []int64  `json:"fail_list"` // 获取失败的计划ID列表
-	PageInfo PageInfo `json:"page_info"`
+	List     []AdListGetResDataDetail `json:"list"`
+	FailList []int64                  `json:"fail_list"` // 获取失败的计划ID列表
+	PageInfo PageInfo                 `json:"page_info"`
+}
+
+type AdListGetResDataDetail struct {
+	AdId          int64  `json:"ad_id"`
+	CampaignId    int64  `json:"campaign_id"`
+	MarketingGoal string `json:"marketing_goal"`
+	PromotionWay  string `json:"promotion_way"`
+	Name          string `json:"name"`
+	Status        string `json:"status"`
+	OptStatus     string `json:"opt_status"`
+	AdCreateTime  string `json:"ad_create_time"`
+	AdModifyTime  string `json:"ad_modify_time"`
+	ProductInfo   []struct {
+		Id            int64   `json:"id"`
+		Name          string  `json:"name"`
+		DiscountPrice float64 `json:"discount_price"`
+		Img           string
+	} `json:"product_info"`
+	AwemeInfo []struct {
+		AwemeId     int64  `json:"aweme_id"`
+		AwemeName   string `json:"aweme_name"`
+		AwemeShowId string `json:"aweme_show_id"`
+		AwemeAvatar string `json:"aweme_avatar"`
+	} `json:"aweme_info"`
+	DeliverySetting struct {
+		SmartBidType   string  `json:"smart_bid_type"`
+		ExternalAction string  `json:"external_action"`
+		Budget         float64 `json:"budget"`
+		BudgetMode     string  `json:"budget_mode"`
+		CpaBid         float64 `json:"cpa_bid"`
+		StartTime      string  `json:"start_time"`
+		EndTime        string  `json:"end_time"`
+	} `json:"delivery_setting"`
 }
 
 // AdListGetRes 获取广告账户数据-返回结构体

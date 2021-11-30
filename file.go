@@ -117,15 +117,16 @@ type FileVideoAdReqBody struct {
 // FileVideoAdRes 上传视频素材 的 响应结构体
 type FileVideoAdRes struct {
 	QCError
-	Data struct {
-		VideoId    string `json:"video_id"`
-		Size       int64  `json:"size"`
-		Width      int64  `json:"width"`
-		Height     int64  `json:"height"`
-		VideoUrl   string `json:"video_url"`
-		Duration   int64  `json:"duration"`
-		MaterialId int64  `json:"material_id"`
-	} `json:"data"`
+	Data FileVideoAdResDetail `json:"data"`
+}
+type FileVideoAdResDetail struct {
+	VideoId    string `json:"video_id"`
+	Size       int64  `json:"size"`
+	Width      int64  `json:"width"`
+	Height     int64  `json:"height"`
+	VideoUrl   string `json:"video_url"`
+	Duration   int64  `json:"duration"`
+	MaterialId int64  `json:"material_id"`
 }
 
 // FileVideoAd 上传视频素材
@@ -195,20 +196,21 @@ type FileImageGetReqFiltering struct {
 type FileImageGetRes struct {
 	QCError
 	Data struct {
-		List []struct { //图片列表
-			Id         string `json:"id"`          //图片ID
-			MaterialId int64  `json:"material_id"` //素材id，即多合一报表中的素材id，一个素材唯一对应一个素材id
-			Size       int64  `json:"size"`        //图片大小
-			Width      int64  `json:"width"`       //图片宽度
-			Height     int64  `json:"height"`      //图片高度
-			Url        string `json:"url"`         //图片预览地址(1小时内有效)，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”
-			Format     string `json:"format"`      //图片格式
-			Signature  string `json:"signature"`   //图片md5
-			CreateTime string `json:"create_time"` //素材的上传时间，格式："yyyy-mm-dd HH:MM:SS"
-			Filename   string `json:"filename"`    //素材的文件名
-		}
+		List     []FileImageGetResDetail
 		PageInfo PageInfo `json:"page_info"`
 	}
+}
+type FileImageGetResDetail struct { //图片列表
+	Id         string `json:"id"`          //图片ID
+	MaterialId int64  `json:"material_id"` //素材id，即多合一报表中的素材id，一个素材唯一对应一个素材id
+	Size       int64  `json:"size"`        //图片大小
+	Width      int64  `json:"width"`       //图片宽度
+	Height     int64  `json:"height"`      //图片高度
+	Url        string `json:"url"`         //图片预览地址(1小时内有效)，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”
+	Format     string `json:"format"`      //图片格式
+	Signature  string `json:"signature"`   //图片md5
+	CreateTime string `json:"create_time"` //素材的上传时间，格式："yyyy-mm-dd HH:MM:SS"
+	Filename   string `json:"filename"`    //素材的文件名
 }
 
 // FileImageGet 获取素材库的图片
@@ -251,25 +253,26 @@ type FileVideoGetReqFiltering struct {
 type FileVideoGetRes struct {
 	QCError
 	Data struct {
-		List []struct { //素材列表
-			Id         string   `json:"id"`          //视频ID
-			Size       int64    `json:"size"`        //视频大小
-			Width      int64    `json:"width"`       //视频宽度
-			Height     int64    `json:"height"`      //视频高度
-			Url        string   `json:"url"`         //视频地址，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”，链接1小时过期
-			Format     string   `json:"format"`      //视频格式
-			Signature  string   `json:"signature"`   //视频md5值
-			PosterUrl  string   `json:"poster_url"`  //视频首帧截图，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”，链接1小时过期
-			BitRate    int64    `json:"bit_rate"`    //码率，单位bps
-			Duration   int64    `json:"duration"`    //视频时长
-			MaterialId int64    `json:"material_id"` //素材id，即多合一报表中的素材id，一个素材唯一对应一个素材id
-			Source     string   `json:"source"`      //素材来源，E_COMMERCE:巨量千川，BP:巨量纵横， STAR:星图&即合， ARTHUR:亚瑟， VIDEO_CAPTURE:易拍
-			CreateTime string   `json:"create_time"` //素材的上传时间，格式："yyyy-mm-dd HH:MM:SS"
-			Filename   string   `json:"filename"`    //素材的文件名
-			Labels     []string `json:"labels"`      //视频标签
-		}
+		List     []FileVideoGetResDetail
 		PageInfo PageInfo `json:"page_info"`
 	}
+}
+type FileVideoGetResDetail struct { //素材列表
+	Id         string   `json:"id"`          //视频ID
+	Size       int64    `json:"size"`        //视频大小
+	Width      int64    `json:"width"`       //视频宽度
+	Height     int64    `json:"height"`      //视频高度
+	Url        string   `json:"url"`         //视频地址，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”，链接1小时过期
+	Format     string   `json:"format"`      //视频格式
+	Signature  string   `json:"signature"`   //视频md5值
+	PosterUrl  string   `json:"poster_url"`  //视频首帧截图，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”，链接1小时过期
+	BitRate    int64    `json:"bit_rate"`    //码率，单位bps
+	Duration   int64    `json:"duration"`    //视频时长
+	MaterialId int64    `json:"material_id"` //素材id，即多合一报表中的素材id，一个素材唯一对应一个素材id
+	Source     string   `json:"source"`      //素材来源，E_COMMERCE:巨量千川，BP:巨量纵横， STAR:星图&即合， ARTHUR:亚瑟， VIDEO_CAPTURE:易拍
+	CreateTime string   `json:"create_time"` //素材的上传时间，格式："yyyy-mm-dd HH:MM:SS"
+	Filename   string   `json:"filename"`    //素材的文件名
+	Labels     []string `json:"labels"`      //视频标签
 }
 
 // FileVideoGet 获取素材库的视频
@@ -306,22 +309,23 @@ type FileVideoAwemeGetReqFiltering struct {
 type FileVideoAwemeGetRes struct {
 	QCError
 	Data struct {
-		List []struct { //视频素材列表
-			AwemeItemId   string `json:"aweme_item_id"`   //抖音短视频 ID
-			VideoCoverUrl string `json:"video_cover_url"` //视频封面图片url
-			Width         int64  `json:"width"`           //视频宽度
-			Height        int64  `json:"height"`          //视频高度
-			Url           string `json:"url"`             //视频地址，链接1小时过期
-			Duration      int64  `json:"duration"`        //视频时长
-			Title         string `json:"title"`           //抖音中的视频标题
-			IsRecommend   int64  `json:"is_recommend"`    //是否推荐 0 不推荐 1 推荐
-		}
+		List     []FileVideoAwemeGetResDetail
 		PageInfo struct { //分页信息
 			HasMore int64 `json:"has_more"` //是否有下一页
 			Count   int64 `json:"count"`    //过滤后返回的视频数量，注意，此处的数量不一定与入参的count一致，因为存在过滤逻辑
 			Cursor  int64 `json:"cursor"`   //下一次分页拉取的游标值
 		} `json:"page_info"`
 	}
+}
+type FileVideoAwemeGetResDetail struct { //视频素材列表
+	AwemeItemId   string `json:"aweme_item_id"`   //抖音短视频 ID
+	VideoCoverUrl string `json:"video_cover_url"` //视频封面图片url
+	Width         int64  `json:"width"`           //视频宽度
+	Height        int64  `json:"height"`          //视频高度
+	Url           string `json:"url"`             //视频地址，链接1小时过期
+	Duration      int64  `json:"duration"`        //视频时长
+	Title         string `json:"title"`           //抖音中的视频标题
+	IsRecommend   int64  `json:"is_recommend"`    //是否推荐 0 不推荐 1 推荐
 }
 
 // FileVideoAwemeGet 获取抖音号下的视频

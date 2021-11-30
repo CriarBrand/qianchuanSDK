@@ -70,40 +70,41 @@ type CreativeGetReqFiltering struct {
 type CreativeGetRes struct {
 	QCError
 	Data struct {
-		List []struct { //创意列表
-			AdId               int64    `json:"ad_id"`                //计划ID
-			CreativeId         int64    `json:"creative_id"`          //创意ID
-			Status             string   `json:"status"`               //创意状态
-			OptStatus          string   `json:"opt_status"`           //创意操作状态
-			ImageMode          string   `json:"image_mode"`           //创意素材类型
-			CreativeCreateTime string   `json:"creative_create_time"` //创意创建时间
-			CreativeModifyTime string   `json:"creative_modify_time"` //创意修改时间
-			VideoMaterial      struct { //视频素材信息
-				VideoId        string `json:"video_id"`         //视频ID
-				VideoCoverId   string `json:"video_cover_id"`   //视频封面ID
-				AwemeItemId    int64  `json:"aweme_item_id"`    //抖音视频ID
-				IsAutoGenerate int64  `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-			} `json:"video_material"`
-			ImageMaterial struct { //图片素材信息
-				ImageIds       []string `json:"image_ids"`        //图片ID列表
-				IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-			} `json:"image_material"`
-			TitleMaterial struct { //标题素材信息
-				Title        string     `json:"title"` //创意标题
-				DynamicWords []struct { //动态词包对象列表
-					WordId      int64  //动态词包ID
-					DictName    string //创意词包名称
-					DefaultWord string //创意词包默认词
-				} `json:"dynamic_words"`
-			} `json:"title_material"`
-		} `json:"list"`
-		PageInfo struct { //页面信息
+		List     []CreativeGetResDetail `json:"list"`
+		PageInfo struct {               //页面信息
 			Page        int64 `json:"page"`         //页码
 			PageSize    int64 `json:"page_size"`    //页面大小
 			TotalNumber int64 `json:"total_number"` //总数
 			TotalPage   int64 `json:"total_page"`   //总页数
 		} `json:"page_info"`
 	} `json:"data"`
+}
+type CreativeGetResDetail struct { //创意列表
+	AdId               int64    `json:"ad_id"`                //计划ID
+	CreativeId         int64    `json:"creative_id"`          //创意ID
+	Status             string   `json:"status"`               //创意状态
+	OptStatus          string   `json:"opt_status"`           //创意操作状态
+	ImageMode          string   `json:"image_mode"`           //创意素材类型
+	CreativeCreateTime string   `json:"creative_create_time"` //创意创建时间
+	CreativeModifyTime string   `json:"creative_modify_time"` //创意修改时间
+	VideoMaterial      struct { //视频素材信息
+		VideoId        string `json:"video_id"`         //视频ID
+		VideoCoverId   string `json:"video_cover_id"`   //视频封面ID
+		AwemeItemId    int64  `json:"aweme_item_id"`    //抖音视频ID
+		IsAutoGenerate int64  `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+	} `json:"video_material"`
+	ImageMaterial struct { //图片素材信息
+		ImageIds       []string `json:"image_ids"`        //图片ID列表
+		IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+	} `json:"image_material"`
+	TitleMaterial struct { //标题素材信息
+		Title        string     `json:"title"` //创意标题
+		DynamicWords []struct { //动态词包对象列表
+			WordId      int64  //动态词包ID
+			DictName    string //创意词包名称
+			DefaultWord string //创意词包默认词
+		} `json:"dynamic_words"`
+	} `json:"title_material"`
 }
 
 // CreativeGet 获取账户下创意列表
@@ -136,19 +137,20 @@ type CreativeRejectReasonReq struct {
 type CreativeRejectReasonRes struct {
 	QCError
 	Data struct {
-		List []struct { //审核详细信息
-			CreativeId   int64      `json:"creative_id"` //广告创意id
-			AuditRecords []struct { //审核详细内容
-				Desc          string   `json:"desc"`           //审核内容，即审核的内容类型，如 视频，图片，标题 等
-				Content       string   `json:"content"`        //拒绝内容（文字类型）
-				ImageId       int64    `json:"image_id"`       //拒绝内容（图片类型）
-				VideoId       int64    `json:"video_id"`       //拒绝内容（视频类型）
-				AuditPlatform string   `json:"audit_platform"` //审核来源类型，返回值： AD 广告审核、CONTENT 内容审核
-				RejectReason  []string `json:"reject_reason"`  //拒绝原因，可能会有多条
-				Suggestion    []string `json:"suggestion"`     //审核建议，可能会有多条
-			} `json:"audit_records"` //
-		} `json:"list"`
+		List []CreativeRejectReasonResDetail `json:"list"`
 	} `json:"data"`
+}
+type CreativeRejectReasonResDetail struct { //审核详细信息
+	CreativeId   int64      `json:"creative_id"` //广告创意id
+	AuditRecords []struct { //审核详细内容
+		Desc          string   `json:"desc"`           //审核内容，即审核的内容类型，如 视频，图片，标题 等
+		Content       string   `json:"content"`        //拒绝内容（文字类型）
+		ImageId       int64    `json:"image_id"`       //拒绝内容（图片类型）
+		VideoId       int64    `json:"video_id"`       //拒绝内容（视频类型）
+		AuditPlatform string   `json:"audit_platform"` //审核来源类型，返回值： AD 广告审核、CONTENT 内容审核
+		RejectReason  []string `json:"reject_reason"`  //拒绝原因，可能会有多条
+		Suggestion    []string `json:"suggestion"`     //审核建议，可能会有多条
+	} `json:"audit_records"` //
 }
 
 // CreativeRejectReason 获取创意审核建议
