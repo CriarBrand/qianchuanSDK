@@ -136,10 +136,11 @@ type ShopAccountInfoReq struct {
 }
 
 type ShopAccountInfoResCom struct {
-	List []struct {
-		ShopId   int64  `json:"shop_id"`
-		ShopName string `json:"shop_name"`
-	} `json:"list"`
+	List []ShopAccountInfoResComDetail `json:"list"`
+}
+type ShopAccountInfoResComDetail struct {
+	ShopId   int64  `json:"shop_id"`
+	ShopName string `json:"shop_name"`
 }
 
 // ShopAccountInfoRes 获取店铺账户信息-返回结构体

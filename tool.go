@@ -25,18 +25,19 @@ type ToolsIndustryGetReq struct {
 type ToolsIndustryGetRes struct {
 	QCError
 	Data struct {
-		List []struct {
-			IndustryId                        int64  `json:"industry_id"`
-			IndustryName                      string `json:"industry_name"`
-			Level                             int64  `json:"level"`
-			ToolsAwemeCategoryTopAuthorGetRes int64  `json:"first_industry_id"`
-			FirstIndustryName                 string `json:"first_industry_name"`
-			SecondIndustryId                  int64  `json:"second_industry_id"`
-			SecondIndustryName                string `json:"second_industry_name"`
-			ThirdIndustryId                   int64  `json:"third_industry_id"`
-			ThirdIndustryName                 string `json:"third_industry_name"`
-		} `json:"list"`
+		List []ToolsIndustryGetResDetail `json:"list"`
 	} `json:"data"`
+}
+type ToolsIndustryGetResDetail struct {
+	IndustryId                        int64  `json:"industry_id"`
+	IndustryName                      string `json:"industry_name"`
+	Level                             int64  `json:"level"`
+	ToolsAwemeCategoryTopAuthorGetRes int64  `json:"first_industry_id"`
+	FirstIndustryName                 string `json:"first_industry_name"`
+	SecondIndustryId                  int64  `json:"second_industry_id"`
+	SecondIndustryName                string `json:"second_industry_name"`
+	ThirdIndustryId                   int64  `json:"third_industry_id"`
+	ThirdIndustryName                 string `json:"third_industry_name"`
 }
 
 // ToolsIndustryGet 获取行业列表
@@ -65,16 +66,17 @@ type ToolsAwemeCategoryTopAuthorGetReq struct {
 type ToolsAwemeCategoryTopAuthorGetRes struct {
 	QCError
 	Data struct {
-		Authors []struct { // 抖音作者名
-			AuthorName      string `json:"author_name"`        //抖音作者名
-			TotalFansNumStr string `json:"total_fans_num_str"` //粉丝数
-			CoverNumStr     string `json:"cover_num_str"`      //覆盖人群数
-			LabelId         string `json:"label_id"`           //抖音号id
-			AwemeId         string `json:"aweme_id"`           //抖音id
-			Avatar          string `json:"avatar"`             //抖音头像
-			CategoryName    string `json:"category_name"`      //抖音分类
-		} `json:"authors"`
+		Authors []ToolsAwemeCategoryTopAuthorGetResAuthor `json:"authors"`
 	} `json:"data"`
+}
+type ToolsAwemeCategoryTopAuthorGetResAuthor struct { // 抖音作者名
+	AuthorName      string `json:"author_name"`        //抖音作者名
+	TotalFansNumStr string `json:"total_fans_num_str"` //粉丝数
+	CoverNumStr     string `json:"cover_num_str"`      //覆盖人群数
+	LabelId         string `json:"label_id"`           //抖音号id
+	AwemeId         string `json:"aweme_id"`           //抖音id
+	Avatar          string `json:"avatar"`             //抖音头像
+	CategoryName    string `json:"category_name"`      //抖音分类
 }
 
 // ToolsAwemeCategoryTopAuthorGet 查询抖音类目下的推荐达人
@@ -104,25 +106,26 @@ type ToolsAwemeMultiLevelCategoryGetReq struct {
 type ToolsAwemeMultiLevelCategoryGetRes struct {
 	QCError
 	Data struct {
-		Categories []struct { // 抖音作者名
+		Categories []ToolsAwemeMultiLevelCategoryGetResCategory `json:"authors"`
+	} `json:"data"`
+}
+type ToolsAwemeMultiLevelCategoryGetResCategory struct { // 抖音作者名
+	Id          int64  `json:"id"`
+	CoverNumStr string `json:"cover_num_str"`
+	FansNumStr  string `json:"fans_num_str"`
+	Value       string `json:"value"`
+	Children    []struct {
+		Id          int64  `json:"id"`
+		CoverNumStr string `json:"cover_num_str"`
+		FansNumStr  string `json:"fans_num_str"`
+		Value       string `json:"value"`
+		Children    []struct {
 			Id          int64  `json:"id"`
 			CoverNumStr string `json:"cover_num_str"`
 			FansNumStr  string `json:"fans_num_str"`
 			Value       string `json:"value"`
-			Children    []struct {
-				Id          int64  `json:"id"`
-				CoverNumStr string `json:"cover_num_str"`
-				FansNumStr  string `json:"fans_num_str"`
-				Value       string `json:"value"`
-				Children    []struct {
-					Id          int64  `json:"id"`
-					CoverNumStr string `json:"cover_num_str"`
-					FansNumStr  string `json:"fans_num_str"`
-					Value       string `json:"value"`
-				} `json:"children"`
-			} `json:"children"`
-		} `json:"authors"`
-	} `json:"data"`
+		} `json:"children"`
+	} `json:"children"`
 }
 
 // ToolsAwemeMultiLevelCategoryGet 查询抖音类目列表
@@ -152,26 +155,30 @@ type ToolsInterestActionActionCategoryReq struct {
 // ToolsInterestActionActionCategoryRes 行为类目查询 的 响应结构体
 type ToolsInterestActionActionCategoryRes struct {
 	QCError
-	Data struct {
-		Id       string     `json:"id"`   //一级行为类目ID
-		Num      string     `json:"num"`  //数量
-		Name     string     `json:"name"` //一级行为类目
-		Children []struct { // 行为子类目
-			Id       string     `json:"id"`   //二级行为类目ID
-			Num      string     `json:"num"`  //数量
-			Name     string     `json:"name"` //二级行为类目
-			Children []struct { // 行为子类目
-				Id       string     `json:"id"`   //三级行为类目ID
-				Num      string     `json:"num"`  //数量
-				Name     string     `json:"name"` //三级行为类目
-				Children []struct { // 行为子类目
-					Id   string `json:"id"`   //行为类目id
-					Num  string `json:"num"`  //数量
-					Name string `json:"name"` //行为类目
-				} `json:"children"`
-			} `json:"children"`
-		} `json:"children"`
-	} `json:"data"`
+	Data ToolsInterestActionActionCategoryResLevelOne `json:"data"`
+}
+type ToolsInterestActionActionCategoryResLevelOne struct { // 行为子类目
+	Id       string                                         `json:"id"`   //行为类目id
+	Num      string                                         `json:"num"`  //数量
+	Name     string                                         `json:"name"` //行为类目
+	Children []ToolsInterestActionActionCategoryResLevelTwo `json:"children"`
+}
+type ToolsInterestActionActionCategoryResLevelTwo struct { // 行为子类目
+	Id       string                                           `json:"id"`   //行为类目id
+	Num      string                                           `json:"num"`  //数量
+	Name     string                                           `json:"name"` //行为类目
+	Children []ToolsInterestActionActionCategoryResLevelThree `json:"children"`
+}
+type ToolsInterestActionActionCategoryResLevelThree struct { // 行为子类目
+	Id       string                                          `json:"id"`   //行为类目id
+	Num      string                                          `json:"num"`  //数量
+	Name     string                                          `json:"name"` //行为类目
+	Children []ToolsInterestActionActionCategoryResLevelFour `json:"children"`
+}
+type ToolsInterestActionActionCategoryResLevelFour struct { // 行为子类目
+	Id   string `json:"id"`   //行为类目id
+	Num  string `json:"num"`  //数量
+	Name string `json:"name"` //行为类目
 }
 
 // ToolsInterestActionActionCategory 行为类目查询
@@ -203,12 +210,13 @@ type ToolsInterestActionActionKeywordReq struct {
 type ToolsInterestActionActionKeywordRes struct {
 	QCError
 	Data struct {
-		List []struct { // 词包列表
-			Id   string `json:"id"`   //关键词id
-			Name string `json:"name"` //关键词名称
-			Num  string `json:"num"`  //关键词数目
-		} `json:"list"`
+		List []ToolsInterestActionActionKeywordResDetail `json:"list"`
 	} `json:"data"`
+}
+type ToolsInterestActionActionKeywordResDetail struct { // 词包列表
+	Id   string `json:"id"`   //关键词id
+	Name string `json:"name"` //关键词名称
+	Num  string `json:"num"`  //关键词数目
 }
 
 // ToolsInterestActionActionKeyword 行为关键词查询
@@ -236,26 +244,30 @@ type ToolsInterestActionInterestCategoryReq struct {
 // ToolsInterestActionInterestCategoryRes 兴趣类目查询 的 响应结构体
 type ToolsInterestActionInterestCategoryRes struct {
 	QCError
-	Data []struct {
-		Id       string `json:"id"`
-		Num      string `json:"num"`
-		Name     string `json:"name"`
-		Children []struct {
-			Id       string `json:"id"`
-			Num      string `json:"num"`
-			Name     string `json:"name"`
-			Children []struct {
-				Id       string `json:"id"`
-				Num      string `json:"num"`
-				Name     string `json:"name"`
-				Children []struct {
-					Id   string `json:"id"`
-					Num  string `json:"num"`
-					Name string `json:"name"`
-				} `json:"children"`
-			} `json:"children"`
-		} `json:"children"`
-	} `json:"data"`
+	Data []ToolsInterestActionInterestCategoryResLevelOne `json:"data"`
+}
+type ToolsInterestActionInterestCategoryResLevelOne struct {
+	Id       string                                           `json:"id"`
+	Num      string                                           `json:"num"`
+	Name     string                                           `json:"name"`
+	Children []ToolsInterestActionInterestCategoryResLevelTwo `json:"children"`
+}
+type ToolsInterestActionInterestCategoryResLevelTwo struct {
+	Id       string                                             `json:"id"`
+	Num      string                                             `json:"num"`
+	Name     string                                             `json:"name"`
+	Children []ToolsInterestActionInterestCategoryResLevelThree `json:"children"`
+}
+type ToolsInterestActionInterestCategoryResLevelThree struct {
+	Id       string                                            `json:"id"`
+	Num      string                                            `json:"num"`
+	Name     string                                            `json:"name"`
+	Children []ToolsInterestActionInterestCategoryResLevelFour `json:"children"`
+}
+type ToolsInterestActionInterestCategoryResLevelFour struct {
+	Id   string `json:"id"`
+	Num  string `json:"num"`
+	Name string `json:"name"`
 }
 
 // ToolsInterestActionInterestCategory 兴趣类目查询
@@ -281,12 +293,13 @@ type ToolsInterestActionInterestKeywordReq struct {
 type ToolsInterestActionInterestKeywordRes struct {
 	QCError
 	Data struct {
-		List []struct { // 词包列表
-			Id   string `json:"id"`   //关键词id
-			Name string `json:"name"` //关键词名称
-			Num  string `json:"num"`  //关键词数目
-		} `json:"list"`
+		List []ToolsInterestActionInterestKeywordResDetail `json:"list"`
 	} `json:"data"`
+}
+type ToolsInterestActionInterestKeywordResDetail struct { // 词包列表
+	Id   string `json:"id"`   //关键词id
+	Name string `json:"name"` //关键词名称
+	Num  string `json:"num"`  //关键词数目
 }
 
 // ToolsInterestActionInterestKeyword 兴趣关键词查询
@@ -312,17 +325,18 @@ type ToolsCreativeWordSelectReq struct {
 type ToolsCreativeWordSelectRes struct {
 	QCError
 	Data struct {
-		CreativeWord []struct { // 词包列表
-			CreativeWordId int64    `json:"creative_word_id"`
-			Name           string   `json:"name"`
-			DefaultWord    string   `json:"default_word"`
-			Words          []string `json:"words"`
-			ContentType    string   `json:"content_type"`
-			MaxWordLen     int64    `json:"max_word_len"`
-			Status         string   `json:"status"`
-			UserRate       float64  `json:"user_rate"`
-		} `json:"creative_word"`
+		CreativeWord []ToolsCreativeWordSelectResDetail `json:"creative_word"`
 	} `json:"data"`
+}
+type ToolsCreativeWordSelectResDetail struct { // 词包列表
+	CreativeWordId int64    `json:"creative_word_id"`
+	Name           string   `json:"name"`
+	DefaultWord    string   `json:"default_word"`
+	Words          []string `json:"words"`
+	ContentType    string   `json:"content_type"`
+	MaxWordLen     int64    `json:"max_word_len"`
+	Status         string   `json:"status"`
+	UserRate       float64  `json:"user_rate"`
 }
 
 // ToolsCreativeWordSelect 查询动态创意词包
@@ -354,19 +368,20 @@ type DmpAudiencesGetReq struct {
 type DmpAudiencesGetRes struct {
 	QCError
 	Data struct {
-		RetargetingTags []struct { // 人群包列表
-			RetargetingTagsId  string `json:"retargeting_tags_id"`  //人群包id
-			Name               string `json:"name"`                 //人群包名称
-			Source             string `json:"source"`               //人群包来源，自定义类详见【附录-DMP相关-人群包来源】，平台精选类返回空值
-			Status             int64  `json:"status"`               //人群包状态，详见【附录-DMP相关-人群包状态】
-			RetargetingTagsOp  string `json:"retargeting_tags_op"`  //人群包可选的定向规则，枚举值：INCLUDE只支持定向，EXCLUDE只支持排除，ALL支持两种规则。 当source为RETARGETING_TAGS_TYPE_PLATFORM时，只支持INCLUDE或EXCLUDE；当source为RETARGETING_TAGS_TYPE_CUSTOM时，支持ALL
-			CoverNum           int64  `json:"cover_num"`            //预估人群包覆盖人群数目
-			RetargetingTagsTip string `json:"retargeting_tags_tip"` //人群包说明
-			IsCommon           int64  `json:"is_common"`            //0 该人群包不支持通投，1 该人群包支持通投，注意：不支持通投的人群包不能在千川平台创建计划，否则会报错。
-		} `json:"retargeting_tags"`
-		Offset   int64 `json:"offset"`    //下一次查询的偏移,类似于SQL中offset(起始为0,翻页时new_offset=old_offset+limit），返回0时，代表已查询到最后一页
-		TotalNum int64 `json:"total_num"` //总的人群包数量
+		RetargetingTags []DmpAudiencesGetResDetail `json:"retargeting_tags"`
+		Offset          int64                      `json:"offset"`    //下一次查询的偏移,类似于SQL中offset(起始为0,翻页时new_offset=old_offset+limit），返回0时，代表已查询到最后一页
+		TotalNum        int64                      `json:"total_num"` //总的人群包数量
 	} `json:"data"`
+}
+type DmpAudiencesGetResDetail struct { // 人群包列表
+	RetargetingTagsId  string `json:"retargeting_tags_id"`  //人群包id
+	Name               string `json:"name"`                 //人群包名称
+	Source             string `json:"source"`               //人群包来源，自定义类详见【附录-DMP相关-人群包来源】，平台精选类返回空值
+	Status             int64  `json:"status"`               //人群包状态，详见【附录-DMP相关-人群包状态】
+	RetargetingTagsOp  string `json:"retargeting_tags_op"`  //人群包可选的定向规则，枚举值：INCLUDE只支持定向，EXCLUDE只支持排除，ALL支持两种规则。 当source为RETARGETING_TAGS_TYPE_PLATFORM时，只支持INCLUDE或EXCLUDE；当source为RETARGETING_TAGS_TYPE_CUSTOM时，支持ALL
+	CoverNum           int64  `json:"cover_num"`            //预估人群包覆盖人群数目
+	RetargetingTagsTip string `json:"retargeting_tags_tip"` //人群包说明
+	IsCommon           int64  `json:"is_common"`            //0 该人群包不支持通投，1 该人群包支持通投，注意：不支持通投的人群包不能在千川平台创建计划，否则会报错。
 }
 
 // DmpAudiencesGet 查询人群包列表
