@@ -1,3 +1,6 @@
+// 千川投放相关的部分工具辅助类API
+// 巨量开放平台地址：https://open.oceanengine.com/doc/index.html?key=qianchuan&type=api&id=1697459568144388
+
 package qianchuanSDK
 
 import (
