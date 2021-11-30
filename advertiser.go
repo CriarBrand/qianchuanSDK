@@ -13,6 +13,8 @@ import (
 // AdvertiserListReq 获取已授权的账户（店铺/代理商）-请求
 type AdvertiserListReq struct {
 	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AppId       int64  // 开发者申请的应用APP_ID，可通过“应用管理”界面查看
+	Secret      string // 开发者应用的私钥Secret，可通过“应用管理”界面查看（确保填入secret与app_id对应以免报错！）
 }
 
 type AdvertiserListResCom struct {
