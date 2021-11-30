@@ -119,18 +119,18 @@ func (m *Manager) BatchCampaignStatusUpdate(req BatchCampaignStatusUpdateReq) (r
 
 // CampaignListGetReq 获取广告账户数据-请求
 type CampaignListGetReq struct {
-	AdvertiserId int64                 // 千川广告账户ID
-	Page         int64                 // 页码，默认为1
-	PageSize     int64                 // 页面大小，默认值: 10， 允许值：10、20、50、100、500、1000
-	Filter       CampaignListGetFilter // 过滤器，无过滤条件情况下返回“所有不包含已删除”的广告组列表
-	AccessToken  string                // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId int64                 `json:"advertiser_id"`       // 千川广告账户ID
+	Page         int64                 `json:"page,omitempty"`      // 页码，默认为1
+	PageSize     int64                 `json:"page_size,omitempty"` // 页面大小，默认值: 10， 允许值：10、20、50、100、500、1000
+	Filter       CampaignListGetFilter `json:"filter"`              // 过滤器，无过滤条件情况下返回“所有不包含已删除”的广告组列表
+	AccessToken  string                `json:"access_token"`        // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
 type CampaignListGetFilter struct {
-	Ids           []int64 `json:"ids"`            // 广告组ID列表，目前只支持一个。
-	Name          string  `json:"name"`           // 广告组名称关键字，长度为1-30个字符，其中1个中文字符算2位
-	MarketingGoal string  `json:"marketing_goal"` // 广告组营销目标，允许值：VIDEO_PROM_GOODS：短视频带货、LIVE_PROM_GOODS：直播带货
-	Status        string  `json:"status"`         // 广告组状态，允许值：ALL：所有包含已删除、ENABLE：启用、DISABLE：暂停、DELETE：已删除。不传入即默认返回“所有不包含已删除”
+	Ids           []int64 `json:"ids,omitempty"`    // 广告组ID列表，目前只支持一个。
+	Name          string  `json:"name,omitempty"`   // 广告组名称关键字，长度为1-30个字符，其中1个中文字符算2位
+	MarketingGoal string  `json:"marketing_goal"`   // 广告组营销目标，允许值：VIDEO_PROM_GOODS：短视频带货、LIVE_PROM_GOODS：直播带货
+	Status        string  `json:"status,omitempty"` // 广告组状态，允许值：ALL：所有包含已删除、ENABLE：启用、DISABLE：暂停、DELETE：已删除。不传入即默认返回“所有不包含已删除”
 }
 
 type CampaignListGetResData struct {

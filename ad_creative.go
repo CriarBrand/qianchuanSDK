@@ -40,7 +40,7 @@ func (m *Manager) CreativeStatusUpdate(req CreativeStatusUpdateReq) (res *Creati
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	err = m.client.CallWithJson(context.Background(), &res, "POST",
-		m.url("%s?", conf.API_AD_CREATIVE_UPDATE), header, req.Body)
+		m.url("%s?", conf.API_CREATIVE_STATUS_UPDATE), header, req.Body)
 	return res, err
 }
 
@@ -51,19 +51,19 @@ type CreativeGetReq struct {
 	AccessToken  string                  `json:"access_token"`
 	AdvertiserId int64                   `json:"advertiser_id"` //千川广告账户ID
 	Filtering    CreativeGetReqFiltering `json:"filtering"`
-	Page         int64                   `json:"page"`      //页码，默认值：1
-	PageSize     int64                   `json:"page_size"` //页面大小，允许值：10, 20, 50, 100, 500, 1000，默认值：10
+	Page         int64                   `json:"page,omitempty"`      //页码，默认值：1
+	PageSize     int64                   `json:"page_size,omitempty"` //页面大小，允许值：10, 20, 50, 100, 500, 1000，默认值：10
 }
 type CreativeGetReqFiltering struct {
-	AdIds                   []int64 `json:"ad_ids"`                     //按计划ID过滤，list长度限制 1-100
-	CreativeId              int64   `json:"creative_id"`                //按创意ID过滤
-	CreativeMaterialMode    string  `json:"creative_material_mode"`     //按创意呈现方式过滤，允许值： CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
-	Status                  string  `json:"status"`                     //按创意状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-创意查询状态】
-	MarketingGoal           string  `json:"marketing_goal"`             //按营销目标过滤，允许值：VIDEO_PROM_GOODS 短视频带货、LIVE_PROM_GOODS 直播带货
-	CampaignId              int64   `json:"campaign_id"`                //按广告组ID过滤
-	CreativeCreateStartDate string  `json:"creative_create_start_date"` //创意创建开始时间，格式："yyyy-mm-dd"
-	CreativeCreateEndDate   string  `json:"creative_create_end_date"`   //创意创建结束时间，与creative_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
-	CreativeModifyTime      string  `json:"creative_modify_time"`       //创意修改时间，格式："yyyy-mm-dd HH"
+	AdIds                   []int64 `json:"ad_ids,omitempty"`                     //按计划ID过滤，list长度限制 1-100
+	CreativeId              int64   `json:"creative_id,omitempty"`                //按创意ID过滤
+	CreativeMaterialMode    string  `json:"creative_material_mode,omitempty"`     //按创意呈现方式过滤，允许值： CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
+	Status                  string  `json:"status,omitempty"`                     //按创意状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-创意查询状态】
+	MarketingGoal           string  `json:"marketing_goal"`                       //按营销目标过滤，允许值：VIDEO_PROM_GOODS 短视频带货、LIVE_PROM_GOODS 直播带货
+	CampaignId              int64   `json:"campaign_id,omitempty"`                //按广告组ID过滤
+	CreativeCreateStartDate string  `json:"creative_create_start_date,omitempty"` //创意创建开始时间，格式："yyyy-mm-dd"
+	CreativeCreateEndDate   string  `json:"creative_create_end_date,omitempty"`   //创意创建结束时间，与creative_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
+	CreativeModifyTime      string  `json:"creative_modify_time,omitempty"`       //创意修改时间，格式："yyyy-mm-dd HH"
 }
 
 // CreativeGetRes 获取账户下创意列表 的 响应结构体
@@ -119,7 +119,7 @@ func (m *Manager) CreativeGet(req CreativeGetReq) (res *CreativeGetRes, err erro
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
-			conf.API_AD_CREATIVE_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
+			conf.API_CREATIVE_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
 	return res, err
 }
 
@@ -164,7 +164,7 @@ func (m *Manager) CreativeRejectReason(req CreativeRejectReasonReq) (res *Creati
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&creative_ids=%s",
-			conf.API_AD_CREATIVE_REJECT, req.AdvertiserId, string(creativeIds)), header, nil)
+			conf.API_CREATIVE_REJECT_REASON, req.AdvertiserId, string(creativeIds)), header, nil)
 	return res, err
 }
 

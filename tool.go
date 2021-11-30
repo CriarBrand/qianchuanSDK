@@ -6,6 +6,7 @@ package qianchuanSDK
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/CriarBrand/qianchuanSDK/conf"
 	"net/http"
 	"net/url"
@@ -15,9 +16,9 @@ import (
 
 // ToolsIndustryGetReq 获取行业列表 的 请求结构体
 type ToolsIndustryGetReq struct {
-	AccessToken string `json:"access_token"` // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	Level       int64  `json:"level"`        //只获取某级别数据，1:第一级,2:第二级,3:第三级，默认都返回
-	Type        string `json:"type"`         //可选值："ADVERTISER"，"AGENT"，"ADVERTISER"为原有广告3.0行业, "AGENT"为代理商行业获取，代理商行业level都为1
+	AccessToken string `json:"access_token"`    // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	Level       int64  `json:"level,omitempty"` //只获取某级别数据，1:第一级,2:第二级,3:第三级，默认都返回
+	Type        string `json:"type,omitempty"`  //可选值："ADVERTISER"，"AGENT"，"ADVERTISER"为原有广告3.0行业, "AGENT"为代理商行业获取，代理商行业level都为1
 }
 
 // ToolsIndustryGetRes 获取行业列表 的 响应结构体
@@ -42,9 +43,11 @@ type ToolsIndustryGetRes struct {
 func (m *Manager) ToolsIndustryGet(req ToolsIndustryGetReq) (res *ToolsIndustryGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
+
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?level=%d&type=%s",
-			conf.API_TOOLS_INDUSTRY_GET, req.Level, req.Type), header, nil)
+			conf.API_TOOLS_INDUSTRY_GET, req.Level, url.QueryEscape(req.Type)), header, nil)
+	fmt.Println("返回错误：", err)
 	return res, err
 }
 
@@ -52,10 +55,10 @@ func (m *Manager) ToolsIndustryGet(req ToolsIndustryGetReq) (res *ToolsIndustryG
 
 // ToolsAwemeCategoryTopAuthorGetReq 查询抖音类目下的推荐达人 的 请求结构体
 type ToolsAwemeCategoryTopAuthorGetReq struct {
-	AccessToken  string   `json:"access_token"`  // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	AdvertiserId int64    `json:"advertiser_id"` // 广告主ID
-	CategoryId   int64    `json:"category_id"`   // 类目id，一级，二级，三级类目id均可
-	Behaviors    []string `json:"behaviors"`     // 抖音用户行为类型，详见【附录-抖音达人互动用户行为类型】 默认为空,仅影响覆盖人群数
+	AccessToken  string   `json:"access_token"`          // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId int64    `json:"advertiser_id"`         // 广告主ID
+	CategoryId   int64    `json:"category_id,omitempty"` // 类目id，一级，二级，三级类目id均可
+	Behaviors    []string `json:"behaviors,omitempty"`   // 抖音用户行为类型，详见【附录-抖音达人互动用户行为类型】 默认为空,仅影响覆盖人群数
 }
 
 // ToolsAwemeCategoryTopAuthorGetRes 查询抖音类目下的推荐达人 的 响应结构体
@@ -92,9 +95,9 @@ func (m *Manager) ToolsAwemeCategoryTopAuthorGet(req ToolsAwemeCategoryTopAuthor
 
 // ToolsAwemeMultiLevelCategoryGetReq 查询抖音类目列表 的 请求结构体
 type ToolsAwemeMultiLevelCategoryGetReq struct {
-	AccessToken  string   `json:"access_token"`  // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	AdvertiserId int64    `json:"advertiser_id"` // 广告主ID
-	Behaviors    []string `json:"behaviors"`     // 抖音用户行为类型，详见【附录-抖音达人互动用户行为类型】 默认为空,仅影响覆盖人群数
+	AccessToken  string   `json:"access_token"`        // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId int64    `json:"advertiser_id"`       // 广告主ID
+	Behaviors    []string `json:"behaviors,omitempty"` // 抖音用户行为类型，详见【附录-抖音达人互动用户行为类型】 默认为空,仅影响覆盖人群数
 }
 
 // ToolsAwemeMultiLevelCategoryGetRes 查询抖音类目列表 的 响应结构体
@@ -300,9 +303,9 @@ func (m *Manager) ToolsInterestActionInterestKeyword(req ToolsInterestActionInte
 
 // ToolsCreativeWordSelectReq 查询动态创意词包 的 请求结构体
 type ToolsCreativeWordSelectReq struct {
-	AccessToken     string   `json:"access_token"`      // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	AdvertiserId    int64    `json:"advertiser_id"`     // 广告主ID
-	CreativeWordIds []string `json:"creative_word_ids"` // 创意词包id列表，如不填默认返回所有创意词包
+	AccessToken     string   `json:"access_token"`                // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId    int64    `json:"advertiser_id"`               // 广告主ID
+	CreativeWordIds []string `json:"creative_word_ids,omitempty"` // 创意词包id列表，如不填默认返回所有创意词包
 }
 
 // ToolsCreativeWordSelectRes 查询动态创意词包 的 响应结构体
@@ -343,8 +346,8 @@ type DmpAudiencesGetReq struct {
 	AccessToken         string `json:"access_token"`          // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	AdvertiserId        int64  `json:"advertiser_id"`         // 千川广告账户ID
 	RetargetingTagsType int64  `json:"retargeting_tags_type"` // 人群包类型，枚举值：0：不限营销目标的平台精选人群包，1：自定义人群包
-	Offset              int64  `json:"offset"`                // 偏移,类似于SQL中offset(起始为0,翻页时new_offset=old_offset+limit），默认值：0，取值范围:≥ 0
-	Limit               int64  `json:"limit"`                 // 返回数据量，默认值：100，取值范围：1-100
+	Offset              int64  `json:"offset,omitempty"`      // 偏移,类似于SQL中offset(起始为0,翻页时new_offset=old_offset+limit），默认值：0，取值范围:≥ 0
+	Limit               int64  `json:"limit,omitempty"`       // 返回数据量，默认值：100，取值范围：1-100
 }
 
 // DmpAudiencesGetRes 查询人群包列表 的 响应结构体

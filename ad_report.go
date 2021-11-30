@@ -68,32 +68,32 @@ func (m *Manager) AdvertiserReport(req AdvertiserReportReq) (res *AdvertiserRepo
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s",
-			conf.API_ADVERTISER_REPORT, req.AdvertiserId, req.StartDate, req.EndDate, string(fields), string(filtering)), header, nil)
+			conf.API_REPORT_ADVERTISER_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields), string(filtering)), header, nil)
 	return res, err
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-// AdReportReq 获取广告计划数据-请求
-type AdReportReq struct {
-	AdvertiserId int64             // 千川广告主账户id
-	StartDate    string            // 开始时间，格式 2021-04-05
-	EndDate      string            // 结束时间，格式 2021-04-05，时间跨度不能超过180天
-	Fields       []string          // 需要查询的消耗指标
-	Filtering    AdReportFiltering `json:"filtering"` //过滤条件
-	OrderField   string            // 排序字段
-	OrderType    string            // 排序方式，允许值： ASC 升序（默认）、DESC 降序
-	Page         int64             // 页码，默认为1
-	PageSize     int64             // 页面大小，默认为10，取值范围：1-500
-	AccessToken  string            // 调用/oauth/access_token/生成的token，此token需要用户授权。
+// ReportAdGetReq 获取广告计划数据-请求
+type ReportAdGetReq struct {
+	AdvertiserId int64                `json:"advertiser_id"`         // 千川广告主账户id
+	StartDate    string               `json:"start_date"`            // 开始时间，格式 2021-04-05
+	EndDate      string               `json:"end_date"`              // 结束时间，格式 2021-04-05，时间跨度不能超过180天
+	Fields       []string             `json:"fields"`                // 需要查询的消耗指标
+	Filtering    ReportAdGetFiltering `json:"filtering"`             //过滤条件
+	OrderField   string               `json:"order_field,omitempty"` // 排序字段
+	OrderType    string               `json:"order_type,omitempty"`  // 排序方式，允许值： ASC 升序（默认）、DESC 降序
+	Page         int64                `json:"page,omitempty"`        // 页码，默认为1
+	PageSize     int64                `json:"page_size,omitempty"`   // 页面大小，默认为10，取值范围：1-500
+	AccessToken  string               `json:"access_token"`          // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
-type AdReportFiltering struct {
+type ReportAdGetFiltering struct {
 	AdIds         []int64 `json:"ad_ids"`         // 广告计划id列表，最多支持100个
 	MarketingGoal string  `json:"marketing_goal"` // 过滤条件 营销目标，允许值：VIDEO_PROM_GOODS：短视频带货  LIVE_PROM_GOODS：直播间带货  ALL：不限
 }
 
-type AdReportResDetail struct {
+type ReportAdGetResDetail struct {
 	AdvertiserId               int64   `json:"advertiser_id"`                  // 广告主id
 	AdId                       int64   `json:"ad_id"`                          // 广告计划id
 	StatCost                   float64 `json:"stat_cost"`                      // 消耗
@@ -128,19 +128,19 @@ type AdReportResDetail struct {
 	LubanLiveGiftAmount        float64 `json:"luban_live_gift_amount"`         // 直播间音浪收入。短视频带货：VIDEO_PROM_GOODS 不支持该指标
 }
 
-type AdReportResData struct {
-	List     []AdReportResDetail `json:"list"`
-	PageInfo PageInfo            `json:"page_info"`
+type ReportAdGetResData struct {
+	List     []ReportAdGetResDetail `json:"list"`
+	PageInfo PageInfo               `json:"page_info"`
 }
 
-// AdReportRes 获取广告计划数据-返回结构体
-type AdReportRes struct {
+// ReportAdGetRes 获取广告计划数据-返回结构体
+type ReportAdGetRes struct {
 	QCError
-	Data AdReportResData `json:"data"`
+	Data ReportAdGetResData `json:"data"`
 }
 
-// AdReport 获取广告计划数据
-func (m *Manager) AdReport(req AdReportReq) (res *AdReportRes, err error) {
+// ReportAdGet 获取广告计划数据
+func (m *Manager) ReportAdGet(req ReportAdGetReq) (res *ReportAdGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	// 接收一个数组并转为string格式
@@ -157,39 +157,39 @@ func (m *Manager) AdReport(req AdReportReq) (res *AdReportRes, err error) {
 	if req.OrderType == "" || req.OrderField == "" {
 		err = m.client.CallWithJson(context.Background(), &res, "GET",
 			m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&page=%d&page_size=%d",
-				conf.API_AD_REPORT, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+				conf.API_REPORT_AD_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
 				string(filtering), req.Page, req.PageSize), header, nil)
 		return res, err
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&order_field=%s&order_type=%s&page=%d&page_size=%d",
-			conf.API_AD_REPORT, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+			conf.API_REPORT_AD_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
 			string(filtering), req.OrderField, req.OrderType, req.Page, req.PageSize), header, nil)
 	return res, err
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-// CreativeReportReq 获取千川广告账户全量信息-请求
-type CreativeReportReq struct {
-	AdvertiserId int64                   // 千川广告主账户id
-	StartDate    string                  // 开始时间，格式 2021-04-05
-	EndDate      string                  // 结束时间，格式 2021-04-05，时间跨度不能超过180天
-	Fields       []string                // 需要查询的消耗指标
-	Filtering    CreativeReportFiltering `json:"filtering"` //过滤条件
-	OrderField   string                  // 排序字段
-	OrderType    string                  // 排序方式，允许值： ASC 升序（默认）、DESC 降序
-	Page         int64                   // 页码，默认为1
-	PageSize     int64                   // 页面大小，默认为10，取值范围：1-500
-	AccessToken  string                  // 调用/oauth/access_token/生成的token，此token需要用户授权。
+// ReportCreativeGetReq 获取广告创意数据-请求
+type ReportCreativeGetReq struct {
+	AdvertiserId int64                      `json:"advertiser_id"`         // 千川广告主账户id
+	StartDate    string                     `json:"start_date"`            // 开始时间，格式 2021-04-05
+	EndDate      string                     `json:"end_date"`              // 结束时间，格式 2021-04-05，时间跨度不能超过180天
+	Fields       []string                   `json:"fields"`                // 需要查询的消耗指标
+	Filtering    ReportCreativeGetFiltering `json:"filtering"`             //过滤条件
+	OrderField   string                     `json:"order_field,omitempty"` // 排序字段
+	OrderType    string                     `json:"order_type,omitempty"`  // 排序方式，允许值： ASC 升序（默认）、DESC 降序
+	Page         int64                      `json:"page,omitempty"`        // 页码，默认为1
+	PageSize     int64                      `json:"page_size,omitempty"`   // 页面大小，默认为10，取值范围：1-500
+	AccessToken  string                     `json:"access_token"`          // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
-type CreativeReportFiltering struct {
+type ReportCreativeGetFiltering struct {
 	CreativeIds   []int64 `json:"creative_ids"`   // 广告创意id列表，数量不超过100
 	MarketingGoal string  `json:"marketing_goal"` // 过滤条件 营销目标，允许值：VIDEO_PROM_GOODS：短视频带货  LIVE_PROM_GOODS：直播间带货  ALL：不限
 }
 
-type CreativeReportResData struct {
+type ReportCreativeGetResData struct {
 	List []struct {
 		AdvertiserId               int64   `json:"advertiser_id"`                  // 广告主id
 		CreativeId                 int64   `json:"creative_id"`                    // 广告创意id
@@ -227,14 +227,14 @@ type CreativeReportResData struct {
 	PageInfo PageInfo `json:"page_info"`
 }
 
-// CreativeReportRes 获取千川广告账户全量信息-返回结构体
-type CreativeReportRes struct {
+// ReportCreativeGetRes 获取千川广告账户全量信息-返回结构体
+type ReportCreativeGetRes struct {
 	QCError
-	Data CreativeReportResData `json:"data"`
+	Data ReportCreativeGetResData `json:"data"`
 }
 
-// CreativeReport 获取千川广告账户全量信息
-func (m *Manager) CreativeReport(req CreativeReportReq) (res *CreativeReportRes, err error) {
+// ReportCreativeGet 获取千川广告账户全量信息
+func (m *Manager) ReportCreativeGet(req ReportCreativeGetReq) (res *ReportCreativeGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	// 接收一个数组并转为string格式
@@ -251,13 +251,13 @@ func (m *Manager) CreativeReport(req CreativeReportReq) (res *CreativeReportRes,
 	if req.OrderType == "" || req.OrderField == "" {
 		err = m.client.CallWithJson(context.Background(), &res, "GET",
 			m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&page=%d&page_size=%d",
-				conf.API_creative_REPORT, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+				conf.API_REPORT_CREATIVE_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
 				string(filtering), req.Page, req.PageSize), header, nil)
 		return res, err
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&order_field=%s&order_type=%s&page=%d&page_size=%d",
-			conf.API_creative_REPORT, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+			conf.API_REPORT_CREATIVE_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
 			string(filtering), req.OrderField, req.OrderType, req.Page, req.PageSize), header, nil)
 	return res, err
 }
