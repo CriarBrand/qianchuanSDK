@@ -267,7 +267,7 @@ type FileVideoGetResDetail struct { //素材列表
 	Signature  string   `json:"signature"`   //视频md5值
 	PosterUrl  string   `json:"poster_url"`  //视频首帧截图，仅限同主体进行素材预览查看，若非同主体会返回“素材所属主体与开发者主体不一致无法获取URL”，链接1小时过期
 	BitRate    int64    `json:"bit_rate"`    //码率，单位bps
-	Duration   int64    `json:"duration"`    //视频时长
+	Duration   float64  `json:"duration"`    //视频时长
 	MaterialId int64    `json:"material_id"` //素材id，即多合一报表中的素材id，一个素材唯一对应一个素材id
 	Source     string   `json:"source"`      //素材来源，E_COMMERCE:巨量千川，BP:巨量纵横， STAR:星图&即合， ARTHUR:亚瑟， VIDEO_CAPTURE:易拍
 	CreateTime string   `json:"create_time"` //素材的上传时间，格式："yyyy-mm-dd HH:MM:SS"
