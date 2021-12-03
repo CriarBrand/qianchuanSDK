@@ -316,9 +316,9 @@ func (m *Manager) ToolsInterestActionInterestKeyword(req ToolsInterestActionInte
 
 // ToolsCreativeWordSelectReq 查询动态创意词包 的 请求结构体
 type ToolsCreativeWordSelectReq struct {
-	AccessToken     string   `json:"access_token"`                // 调用/oauth/access_token/生成的token，此token需要用户授权。
-	AdvertiserId    int64    `json:"advertiser_id"`               // 广告主ID
-	CreativeWordIds []string `json:"creative_word_ids,omitempty"` // 创意词包id列表，如不填默认返回所有创意词包
+	AccessToken     string   `json:"access_token"`      // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AdvertiserId    int64    `json:"advertiser_id"`     // 广告主ID
+	CreativeWordIds []string `json:"creative_word_ids"` // 创意词包id列表，如不填默认返回所有创意词包
 }
 
 // ToolsCreativeWordSelectRes 查询动态创意词包 的 响应结构体
@@ -343,13 +343,17 @@ type ToolsCreativeWordSelectResDetail struct { // 词包列表
 func (m *Manager) ToolsCreativeWordSelect(req ToolsCreativeWordSelectReq) (res *ToolsCreativeWordSelectRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	creativeWordIds, err := json.Marshal(req.CreativeWordIds)
-	if err != nil {
-		return nil, err
+	var CreativeWordIdsStr string
+	if len(req.CreativeWordIds) > 0 {
+		creativeWordIds, err := json.Marshal(req.CreativeWordIds)
+		if err != nil {
+			return nil, err
+		}
+		CreativeWordIdsStr = string(creativeWordIds)
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
 		m.url("%s?advertiser_id=%d&creative_word_ids=%s",
-			conf.API_TOOLS_CREATIVE_WORD_SELECT, req.AdvertiserId, string(creativeWordIds)), header, nil)
+			conf.API_TOOLS_CREATIVE_WORD_SELECT, req.AdvertiserId, CreativeWordIdsStr), header, nil)
 	return res, err
 }
 
