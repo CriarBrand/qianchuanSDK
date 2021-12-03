@@ -643,7 +643,7 @@ type AdDetailGetResData struct {
 			DefaultWord string `json:"default_word"` //创意词包默认词
 		}
 	} `json:"programmatic_creative_title_list"`
-	ProgrammaticCreativeCard []struct { //程序化创意推广卡片信息
+	ProgrammaticCreativeCard struct { //程序化创意推广卡片信息
 		PromotionCardTitle                   string   `json:"promotion_card_title"`                     //推广卡片标题
 		PromotionCardSellingPoints           []string `json:"promotion_card_selling_points"`            //推广卡片卖点列表
 		PromotionCardImageId                 string   `json:"promotion_card_image_id"`                  //推广卡片配图ID
