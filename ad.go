@@ -518,140 +518,184 @@ type AdDetailGetRes struct {
 	Data AdDetailGetResData `json:"data"`
 }
 
+// AdDetailGetResAweme 计划中关联的抖音号信息
+type AdDetailGetResAweme struct {
+	AwemeAvatar string `json:"aweme_avatar"`  //抖音ID
+	AwemeName   string `json:"aweme_name"`    //抖音号，即客户在手机端感知到的抖音号，向客户批量抖音号时请使用该字段
+	AwemeShowID string `json:"aweme_show_id"` //抖音号昵称
+	AwemeID     int64  `json:"aweme_id"`      //抖音号头像
+}
+
+// AdDetailGetResProduct 商品列表
+type AdDetailGetResProduct struct {
+	ID            int64   `json:"id"`             //商品id
+	Name          string  `json:"name"`           //商品名称
+	DiscountPrice float32 `json:"discount_price"` //售价
+	Img           string  `json:"img"`            //商品主图
+}
+
+// AdDetailGetResRoom 直播间列表
+type AdDetailGetResRoom struct {
+	AnchorName   string      `json:"anchor_name"`   //主播名称
+	RoomStatus   string      `json:"room_status"`   //直播间状态（若未开播，则返回NULL）
+	RoomTitle    interface{} `json:"room_title"`    //直播间名称（若未开播，则返回NULL）
+	AnchorID     int64       `json:"anchor_id"`     //主播ID
+	AnchorAvatar string      `json:"anchor_avatar"` //主播头像
+}
+
+// AdDetailGetResDeliverySetting 投放设置
+type AdDetailGetResDeliverySetting struct {
+	SmartBidType       string  `json:"smart_bid_type"`       //投放场景（出价方式）
+	FlowControlMode    string  `json:"flow_control_mode"`    //投放速度
+	ExternalAction     string  `json:"external_action"`      //转化目标
+	DeepExternalAction string  `json:"deep_external_action"` //深度转化目标
+	Budget             float32 `json:"budget"`               //预算
+	BudgetMode         string  `json:"budget_mode"`          //预算类型
+	CpaBid             float32 `json:"cpa_bid"`              //转化出价
+	LiveScheduleType   string  `json:"live_schedule_type"`   //短视频投放日期选择方式
+	VideoScheduleType  string  `json:"video_schedule_type"`  //直播间投放时段选择方式
+	StartTime          string  `json:"start_time"`           //投放开始时间
+	EndTime            string  `json:"end_time"`             //投放结束时间
+	ScheduleTime       string  `json:"schedule_time"`        //投放时段，当 video_schedule_type 和 live_schedule_type为SCHEDULE_START_END和SCHEDULE_FROM_NOW时有值，格式是48*7位字符串，且都是0或1。也就是以半个小时为最小粒度，周一至周日每天分为48个区段，0为不投放，1为投放，不传、全传0、全传1均代表全时段投放
+	ScheduleFixedRange int     `json:"schedule_fixed_range"` //固定投放时长，当 live_schedule_type 为时有值；单位为秒，最小值为1800（0.5小时），最大值为48*1800（24小时）SCHEDULE_TIME_FIXEDRANGE
+}
+
+// AdDetailGetResAudience 定向设置
+type AdDetailGetResAudience struct {
+	District               string   `json:"district"`                 //地域定向类型，配合city字段使用，允许值：CITY：省市，COUNTY：区县，NONE：不限；默认值：NONE
+	City                   []int64  `json:"city"`                     //具体定向的城市列表，当 district 为COUNTY，city 为必填，枚举值详见【附件-city.json】；省市传法：city: [12]，district: CITY；区县的传法：city: [130102]，district: COUNTY
+	LocationType           string   `json:"location_type"`            //地域定向的用户状态类型，当 district 为COUNTY，CITY为必填，允许值：CURRENT：正在该地区的用户，HOME：居住在该地区的用户，TRAVEL；到该地区旅行的用户，ALL：该地区内的所有用户
+	Gender                 string   `json:"gender"`                   //允许值: GENDER_FEMALE：女性，GENDER_MALE：男性，NONE： 不限
+	Age                    string   `json:"age"`                      //年龄，详见【附录-受众年龄区间】；允许值：AGE_BETWEEN_18_23, AGE_BETWEEN_24_30, AGE_BETWEEN_31_40, AGE_BETWEEN_41_49, AGE_ABOVE_50
+	AwemeFanBehaviors      []string `json:"aweme_fan_behaviors"`      //抖音达人互动用户行为类型
+	AwemeFanBehaviorsDays  string   `json:"aweme_fan_behaviors_days"` //抖音达人互动用户行为天数
+	AwemeFanCategories     []int64  `json:"aweme_fan_categories"`     //抖音达人分类ID列表
+	AwemeFanAccounts       []int64  `json:"aweme_fan_accounts"`       //抖音达人ID列表
+	AutoExtendEnabled      int64    `json:"auto_extend_enabled"`      //是否启用智能放量
+	AutoExtendTargets      []string `json:"auto_extend_targets"`      //可放开定向列表
+	Platform               []string `json:"platform"`                 //投放平台列表
+	SmartInterestAction    string   `json:"smart_interest_action"`    //行为兴趣意向定向模式
+	ActionScene            []string `json:"action_scene"`             //行为场景
+	ActionDays             int64    `json:"action_days"`              //用户发生行为天数
+	ActionCategories       []int64  `json:"action_categories"`        //行为类目词
+	ActionWords            []int64  `json:"action_words"`             //行为关键词
+	InterestCategories     []int64  `json:"interest_categories"`      //兴趣类目词
+	InterestWords          []int64  `json:"interest_words"`           //兴趣关键词
+	Ac                     []string `json:"ac"`                       //网络类型
+	RetargetingTagsInclude []int64  `json:"retargeting_tags_include"` //定向人群包id列表
+	RetargetingTagsExclude []int64  `json:"retargeting_tags_exclude"` //排除人群包id列表
+	LivePlatformTags       []string `json:"live_platform_tags"`       //直播带货平台精选人群包
+}
+
+// AdDetailGetResProgrammaticCreativeMedia 程序化创意素材信息
+type AdDetailGetResProgrammaticCreativeMedia struct {
+	ImageMode      string   `json:"image_mode"`       //创意素材类型
+	VideoId        string   `json:"video_id"`         //视频ID
+	VideoCoverId   string   `json:"video_cover_id"`   //视频封面ID
+	ImageIds       []string `json:"image_ids"`        //图片ID列表
+	IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+}
+
+// AdDetailGetResProgrammaticCreativeTitle 程序化创意标题信息
+type AdDetailGetResProgrammaticCreativeTitle struct {
+	Title        string `json:"title"` //创意标题
+	DynamicWords []AdDetailGetResProgrammaticCreativeTitleDynamicWord
+}
+
+// AdDetailGetResProgrammaticCreativeTitleDynamicWord 动态词包对象列表
+type AdDetailGetResProgrammaticCreativeTitleDynamicWord struct {
+	WordId      int64  `json:"word_id"`      //动态词包ID
+	DictName    string `json:"dict_name"`    //创意词包名称
+	DefaultWord string `json:"default_word"` //创意词包默认词
+}
+
+// AdDetailGetResProgrammaticCreativeCard 程序化创意推广卡片信息
+type AdDetailGetResProgrammaticCreativeCard struct {
+	PromotionCardTitle                   string   `json:"promotion_card_title"`                     //推广卡片标题
+	PromotionCardSellingPoints           []string `json:"promotion_card_selling_points"`            //推广卡片卖点列表
+	PromotionCardImageId                 string   `json:"promotion_card_image_id"`                  //推广卡片配图ID
+	PromotionCardActionButton            string   `json:"promotion_card_action_button"`             //推广卡片行动号召按钮文案
+	PromotionCardButtonSmartOptimization int64    `json:"promotion_card_button_smart_optimization"` //智能优选行动号召按钮文案开关
+}
+
+// AdDetailGetResCreative 创意信息
+type AdDetailGetResCreative struct {
+	CreativeID            int64                                       `json:"creative_id"`          //创意ID，程序化创意审核通过后才会生成创意ID
+	ImageMode             string                                      `json:"image_mode"`           //创意素材类型
+	CreativeCreateTime    string                                      `json:"creative_create_time"` //创意创建时间
+	CreativeModifyTime    string                                      `json:"creative_modify_time"` //创意修改时间
+	VideoMaterial         AdDetailGetResCreativeVideoMaterial         `json:"video_material"`
+	ImageMaterial         AdDetailGetResCreativeImageMaterial         `json:"image_material"`
+	TitleMaterial         AdDetailGetResCreativeTitleMaterial         `json:"title_material"`
+	PromotionCardMaterial AdDetailGetResCreativePromotionCardMaterial `json:"promotion_card_material"`
+}
+
+// AdDetailGetResCreativeVideoMaterial 视频素材信息
+type AdDetailGetResCreativeVideoMaterial struct {
+	Id             int64  `json:"id"`               //素材唯一标识
+	VideoId        string `json:"video_id"`         //视频ID
+	VideoCoverId   string `json:"video_cover_id"`   //视频封面ID
+	AwemeItemId    int64  `json:"aweme_item_id"`    //抖音视频ID
+	IsAutoGenerate int64  `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+}
+
+// AdDetailGetResCreativeImageMaterial 图片素材信息
+type AdDetailGetResCreativeImageMaterial struct {
+	Id             int64    `json:"id"`               //素材唯一标识
+	ImageIds       []string `json:"image_ids"`        //图片ID列表
+	IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+}
+
+// AdDetailGetResCreativeTitleMaterial 标题素材信息
+type AdDetailGetResCreativeTitleMaterial struct {
+	Id           int64                                             `json:"id"`    //素材唯一标识
+	Title        string                                            `json:"title"` //创意标题
+	DynamicWords []AdDetailGetResCreativeTitleMaterialDynamicWords `json:"dynamic_words"`
+}
+
+// AdDetailGetResCreativeTitleMaterialDynamicWords 动态词包对象列表
+type AdDetailGetResCreativeTitleMaterialDynamicWords struct {
+	WordId      int64  `json:"word_id"`      //动态词包ID
+	DictName    string `json:"dict_name"`    //创意词包名称
+	DefaultWord string `json:"default_word"` //创意词包默认词
+}
+
+// AdDetailGetResCreativePromotionCardMaterial 推广卡片信息
+type AdDetailGetResCreativePromotionCardMaterial struct {
+	Id                      int64    `json:"id"`                        //素材唯一标识
+	ComponentId             int64    `json:"component_id"`              //组件唯一标识
+	Title                   string   `json:"title"`                     //推广卡片标题
+	SellingPoints           []string `json:"selling_points"`            //推广卡片卖点列表
+	ImageId                 string   `json:"image_id"`                  //推广卡片配图ID
+	ActionButton            string   `json:"action_button"`             //推广卡片行动号召按钮文案
+	ButtonSmartOptimization int64    `json:"button_smart_optimization"` //智能优选行动号召按钮文案开关
+}
 type AdDetailGetResData struct {
-	AdID          int64      `json:"ad_id"`          //计划ID
-	CampaignId    int64      `json:"campaign_id"`    //广告组ID
-	MarketingGoal string     `json:"marketing_goal"` //营销目标
-	PromotionWay  string     `json:"promotion_way"`  //推广方式
-	Name          string     `json:"name"`           //计划名称
-	Status        string     `json:"status"`         //计划投放状态
-	OptStatus     string     `json:"opt_status"`     //计划操作状态
-	AdCreateTime  string     `json:"ad_create_time"` //计划创建时间
-	AdModifyTime  string     `json:"ad_modify_time"` //计划修改时间
-	AwemeInfo     []struct { //计划中关联的抖音号信息
-		AwemeAvatar string `json:"aweme_avatar"`  //抖音ID
-		AwemeName   string `json:"aweme_name"`    //抖音号，即客户在手机端感知到的抖音号，向客户批量抖音号时请使用该字段
-		AwemeShowID string `json:"aweme_show_id"` //抖音号昵称
-		AwemeID     int64  `json:"aweme_id"`      //抖音号头像
-	} `json:"aweme_info"`
-	ProductInfo []struct { //商品列表
-		ID            int64   `json:"id"`             //商品id
-		Name          string  `json:"name"`           //商品名称
-		DiscountPrice float32 `json:"discount_price"` //售价
-		Img           string  `json:"img"`            //商品主图
-	} `json:"product_info"`
-	RoomInfo []struct { //直播间列表
-		AnchorName   string      `json:"anchor_name"`   //主播名称
-		RoomStatus   string      `json:"room_status"`   //直播间状态（若未开播，则返回NULL）
-		RoomTitle    interface{} `json:"room_title"`    //直播间名称（若未开播，则返回NULL）
-		AnchorID     int64       `json:"anchor_id"`     //主播ID
-		AnchorAvatar string      `json:"anchor_avatar"` //主播头像
-	} `json:"room_info"`
-	DeliverySetting struct { //投放设置
-		SmartBidType       string  `json:"smart_bid_type"`       //投放场景（出价方式）
-		FlowControlMode    string  `json:"flow_control_mode"`    //投放速度
-		ExternalAction     string  `json:"external_action"`      //转化目标
-		DeepExternalAction string  `json:"deep_external_action"` //深度转化目标
-		Budget             float32 `json:"budget"`               //预算
-		BudgetMode         string  `json:"budget_mode"`          //预算类型
-		CpaBid             float32 `json:"cpa_bid"`              //转化出价
-		LiveScheduleType   string  `json:"live_schedule_type"`   //短视频投放日期选择方式
-		VideoScheduleType  string  `json:"video_schedule_type"`  //直播间投放时段选择方式
-		StartTime          string  `json:"start_time"`           //投放开始时间
-		EndTime            string  `json:"end_time"`             //投放结束时间
-		ScheduleTime       string  `json:"schedule_time"`        //投放时段，当 video_schedule_type 和 live_schedule_type为SCHEDULE_START_END和SCHEDULE_FROM_NOW时有值，格式是48*7位字符串，且都是0或1。也就是以半个小时为最小粒度，周一至周日每天分为48个区段，0为不投放，1为投放，不传、全传0、全传1均代表全时段投放
-		ScheduleFixedRange int     `json:"schedule_fixed_range"` //固定投放时长，当 live_schedule_type 为时有值；单位为秒，最小值为1800（0.5小时），最大值为48*1800（24小时）SCHEDULE_TIME_FIXEDRANGE
-	} `json:"delivery_setting"`
-	Audience struct { //定向设置
-		District               string   `json:"district"`                 //地域定向类型，配合city字段使用，允许值：CITY：省市，COUNTY：区县，NONE：不限；默认值：NONE
-		City                   []int64  `json:"city"`                     //具体定向的城市列表，当 district 为COUNTY，city 为必填，枚举值详见【附件-city.json】；省市传法：city: [12]，district: CITY；区县的传法：city: [130102]，district: COUNTY
-		LocationType           string   `json:"location_type"`            //地域定向的用户状态类型，当 district 为COUNTY，CITY为必填，允许值：CURRENT：正在该地区的用户，HOME：居住在该地区的用户，TRAVEL；到该地区旅行的用户，ALL：该地区内的所有用户
-		Gender                 string   `json:"gender"`                   //允许值: GENDER_FEMALE：女性，GENDER_MALE：男性，NONE： 不限
-		Age                    []string `json:"age"`                      //年龄，详见【附录-受众年龄区间】；允许值：AGE_BETWEEN_18_23, AGE_BETWEEN_24_30, AGE_BETWEEN_31_40, AGE_BETWEEN_41_49, AGE_ABOVE_50
-		AwemeFanBehaviors      []string `json:"aweme_fan_behaviors"`      //抖音达人互动用户行为类型
-		AwemeFanBehaviorsDays  string   `json:"aweme_fan_behaviors_days"` //抖音达人互动用户行为天数
-		AwemeFanCategories     []int64  `json:"aweme_fan_categories"`     //抖音达人分类ID列表
-		AwemeFanAccounts       []int64  `json:"aweme_fan_accounts"`       //抖音达人ID列表
-		AutoExtendEnabled      int64    `json:"auto_extend_enabled"`      //是否启用智能放量
-		AutoExtendTargets      []string `json:"auto_extend_targets"`      //可放开定向列表
-		Platform               []string `json:"platform"`                 //投放平台列表
-		SmartInterestAction    string   `json:"smart_interest_action"`    //行为兴趣意向定向模式
-		ActionScene            []string `json:"action_scene"`             //行为场景
-		ActionDays             int64    `json:"action_days"`              //用户发生行为天数
-		ActionCategories       []int64  `json:"action_categories"`        //行为类目词
-		ActionWords            []int64  `json:"action_words"`             //行为关键词
-		InterestCategories     []int64  `json:"interest_categories"`      //兴趣类目词
-		InterestWords          []int64  `json:"interest_words"`           //兴趣关键词
-		Ac                     []string `json:"ac"`                       //网络类型
-		RetargetingTagsInclude []int64  `json:"retargeting_tags_include"` //定向人群包id列表
-		RetargetingTagsExclude []int64  `json:"retargeting_tags_exclude"` //排除人群包id列表
-		LivePlatformTags       []string `json:"live_platform_tags"`       //直播带货平台精选人群包
-	} `json:"audience"`
-	CreativeMaterialMode string     `json:"creative_material_mode"` //创意呈现方式
-	FirstIndustryID      int        `json:"first_industry_id"`      //创意一级行业ID
-	SecondIndustryID     int        `json:"second_industry_id"`     //创意二级行业ID
-	ThirdIndustryID      int        `json:"third_industry_id"`      //创意三级行业ID
-	AdKeywords           []string   `json:"ad_keywords"`            //创意标签
-	CreativeList         []struct { //创意信息
-		CreativeID         int64    `json:"creative_id"`          //创意ID，程序化创意审核通过后才会生成创意ID
-		ImageMode          string   `json:"image_mode"`           //创意素材类型
-		CreativeCreateTime string   `json:"creative_create_time"` //创意创建时间
-		CreativeModifyTime string   `json:"creative_modify_time"` //创意修改时间
-		VideoMaterial      struct { //视频素材信息
-			Id             int64  `json:"id"`               //素材唯一标识
-			VideoId        string `json:"video_id"`         //视频ID
-			VideoCoverId   string `json:"video_cover_id"`   //视频封面ID
-			AwemeItemId    int64  `json:"aweme_item_id"`    //抖音视频ID
-			IsAutoGenerate int64  `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-		} `json:"video_material"`
-		ImageMaterial struct { //图片素材信息
-			Id             int64    `json:"id"`               //素材唯一标识
-			ImageIds       []string `json:"image_ids"`        //图片ID列表
-			IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-		} `json:"image_material"`
-		TitleMaterial struct { //标题素材信息
-			Id           int64    `json:"id"`    //素材唯一标识
-			Title        string   `json:"title"` //创意标题
-			DynamicWords struct { //动态词包对象列表
-				WordId      int64  `json:"word_id"`      //动态词包ID
-				DictName    string `json:"dict_name"`    //创意词包名称
-				DefaultWord string `json:"default_word"` //创意词包默认词
-			} `json:"dynamic_words"`
-		} `json:"title_material"`
-		PromotionCardMaterial struct { //推广卡片信息
-			Id                      int64    `json:"id"`                        //素材唯一标识
-			ComponentId             int64    `json:"component_id"`              //组件唯一标识
-			Title                   string   `json:"title"`                     //推广卡片标题
-			SellingPoints           []string `json:"selling_points"`            //推广卡片卖点列表
-			ImageId                 string   `json:"image_id"`                  //推广卡片配图ID
-			ActionButton            string   `json:"action_button"`             //推广卡片行动号召按钮文案
-			ButtonSmartOptimization int64    `json:"button_smart_optimization"` //智能优选行动号召按钮文案开关
-		} `json:"promotion_card_material"`
-	} `json:"creative_list"`
-	ProgrammaticCreativeMediaList []struct { //程序化创意素材信息
-		ImageMode      string   `json:"image_mode"`       //创意素材类型
-		VideoId        string   `json:"video_id"`         //视频ID
-		VideoCoverId   string   `json:"video_cover_id"`   //视频封面ID
-		ImageIds       []string `json:"image_ids"`        //图片ID列表
-		IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-	} `json:"programmatic_creative_media_list"`
-	ProgrammaticCreativeTitleList []struct { //程序化创意标题信息
-		Title        string     `json:"title"` //创意标题
-		DynamicWords []struct { //动态词包对象列表
-			WordId      int64  `json:"word_id"`      //动态词包ID
-			DictName    string `json:"dict_name"`    //创意词包名称
-			DefaultWord string `json:"default_word"` //创意词包默认词
-		}
-	} `json:"programmatic_creative_title_list"`
-	ProgrammaticCreativeCard struct { //程序化创意推广卡片信息
-		PromotionCardTitle                   string   `json:"promotion_card_title"`                     //推广卡片标题
-		PromotionCardSellingPoints           []string `json:"promotion_card_selling_points"`            //推广卡片卖点列表
-		PromotionCardImageId                 string   `json:"promotion_card_image_id"`                  //推广卡片配图ID
-		PromotionCardActionButton            string   `json:"promotion_card_action_button"`             //推广卡片行动号召按钮文案
-		PromotionCardButtonSmartOptimization int64    `json:"promotion_card_button_smart_optimization"` //智能优选行动号召按钮文案开关
-	} `json:"programmatic_creative_card"`
-	CreativeAutoGenerate int `json:"creative_auto_generate"` //是否开启「生成更多创意」
-	IsHomepageHide       int `json:"is_homepage_hide"`       //抖音主页是否隐藏视频
+	AdID                          int64                                     `json:"ad_id"`          //计划ID
+	CampaignId                    int64                                     `json:"campaign_id"`    //广告组ID
+	MarketingGoal                 string                                    `json:"marketing_goal"` //营销目标
+	PromotionWay                  string                                    `json:"promotion_way"`  //推广方式
+	Name                          string                                    `json:"name"`           //计划名称
+	Status                        string                                    `json:"status"`         //计划投放状态
+	OptStatus                     string                                    `json:"opt_status"`     //计划操作状态
+	AdCreateTime                  string                                    `json:"ad_create_time"` //计划创建时间
+	AdModifyTime                  string                                    `json:"ad_modify_time"` //计划修改时间
+	AwemeInfo                     []AdDetailGetResAweme                     `json:"aweme_info"`
+	ProductInfo                   []AdDetailGetResProduct                   `json:"product_info"`
+	RoomInfo                      []AdDetailGetResRoom                      `json:"room_info"`
+	DeliverySetting               AdDetailGetResDeliverySetting             `json:"delivery_setting"`
+	Audience                      AdDetailGetResAudience                    `json:"audience"`
+	CreativeMaterialMode          string                                    `json:"creative_material_mode"` //创意呈现方式
+	FirstIndustryID               int                                       `json:"first_industry_id"`      //创意一级行业ID
+	SecondIndustryID              int                                       `json:"second_industry_id"`     //创意二级行业ID
+	ThirdIndustryID               int                                       `json:"third_industry_id"`      //创意三级行业ID
+	AdKeywords                    []string                                  `json:"ad_keywords"`            //创意标签
+	CreativeList                  []AdDetailGetResCreative                  `json:"creative_list"`
+	ProgrammaticCreativeMediaList []AdDetailGetResProgrammaticCreativeMedia `json:"programmatic_creative_media_list"`
+	ProgrammaticCreativeTitleList []AdDetailGetResProgrammaticCreativeTitle `json:"programmatic_creative_title_list"`
+	ProgrammaticCreativeCard      []AdDetailGetResProgrammaticCreativeCard  `json:"programmatic_creative_card"`
+	CreativeAutoGenerate          int                                       `json:"creative_auto_generate"` //是否开启「生成更多创意」
+	IsHomepageHide                int                                       `json:"is_homepage_hide"`       //抖音主页是否隐藏视频
 }
 
 // AdDetailGet 获取计划详情（含创意信息）
