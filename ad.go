@@ -536,11 +536,11 @@ type AdDetailGetResProduct struct {
 
 // AdDetailGetResRoom 直播间列表
 type AdDetailGetResRoom struct {
-	AnchorName   string      `json:"anchor_name"`   //主播名称
-	RoomStatus   string      `json:"room_status"`   //直播间状态（若未开播，则返回NULL）
-	RoomTitle    interface{} `json:"room_title"`    //直播间名称（若未开播，则返回NULL）
-	AnchorID     int64       `json:"anchor_id"`     //主播ID
-	AnchorAvatar string      `json:"anchor_avatar"` //主播头像
+	AnchorName   string `json:"anchor_name"`   //主播名称
+	RoomStatus   string `json:"room_status"`   //直播间状态（若未开播，则返回NULL）
+	RoomTitle    string `json:"room_title"`    //直播间名称（若未开播，则返回NULL）
+	AnchorID     int64  `json:"anchor_id"`     //主播ID
+	AnchorAvatar string `json:"anchor_avatar"` //主播头像
 }
 
 // AdDetailGetResDeliverySetting 投放设置
