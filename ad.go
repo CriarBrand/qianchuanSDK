@@ -693,7 +693,7 @@ type AdDetailGetResData struct {
 	CreativeList                  []AdDetailGetResCreative                  `json:"creative_list"`
 	ProgrammaticCreativeMediaList []AdDetailGetResProgrammaticCreativeMedia `json:"programmatic_creative_media_list"`
 	ProgrammaticCreativeTitleList []AdDetailGetResProgrammaticCreativeTitle `json:"programmatic_creative_title_list"`
-	ProgrammaticCreativeCard      []AdDetailGetResProgrammaticCreativeCard  `json:"programmatic_creative_card"`
+	ProgrammaticCreativeCard      AdDetailGetResProgrammaticCreativeCard    `json:"programmatic_creative_card"`
 	CreativeAutoGenerate          int                                       `json:"creative_auto_generate"` //是否开启「生成更多创意」
 	IsHomepageHide                int                                       `json:"is_homepage_hide"`       //抖音主页是否隐藏视频
 }
