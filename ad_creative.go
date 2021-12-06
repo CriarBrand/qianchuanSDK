@@ -80,31 +80,44 @@ type CreativeGetRes struct {
 	} `json:"data"`
 }
 type CreativeGetResDetail struct { //创意列表
-	AdId               int64    `json:"ad_id"`                //计划ID
-	CreativeId         int64    `json:"creative_id"`          //创意ID
-	Status             string   `json:"status"`               //创意状态
-	OptStatus          string   `json:"opt_status"`           //创意操作状态
-	ImageMode          string   `json:"image_mode"`           //创意素材类型
-	CreativeCreateTime string   `json:"creative_create_time"` //创意创建时间
-	CreativeModifyTime string   `json:"creative_modify_time"` //创意修改时间
-	VideoMaterial      struct { //视频素材信息
-		VideoId        string `json:"video_id"`         //视频ID
-		VideoCoverId   string `json:"video_cover_id"`   //视频封面ID
-		AwemeItemId    int64  `json:"aweme_item_id"`    //抖音视频ID
-		IsAutoGenerate int64  `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-	} `json:"video_material"`
-	ImageMaterial struct { //图片素材信息
-		ImageIds       []string `json:"image_ids"`        //图片ID列表
-		IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
-	} `json:"image_material"`
-	TitleMaterial struct { //标题素材信息
-		Title        string     `json:"title"` //创意标题
-		DynamicWords []struct { //动态词包对象列表
-			WordId      int64  //动态词包ID
-			DictName    string //创意词包名称
-			DefaultWord string //创意词包默认词
-		} `json:"dynamic_words"`
-	} `json:"title_material"`
+	AdId               int64                             `json:"ad_id"`                //计划ID
+	CreativeId         int64                             `json:"creative_id"`          //创意ID
+	Status             string                            `json:"status"`               //创意状态
+	OptStatus          string                            `json:"opt_status"`           //创意操作状态
+	ImageMode          string                            `json:"image_mode"`           //创意素材类型
+	CreativeCreateTime string                            `json:"creative_create_time"` //创意创建时间
+	CreativeModifyTime string                            `json:"creative_modify_time"` //创意修改时间
+	LabAdType          string                            `json:"lab_ad_type"`          //托管计划类型
+	VideoMaterial      CreativeGetResDetailVideoMaterial `json:"video_material"`
+	ImageMaterial      CreativeGetResDetailImageMaterial `json:"image_material"`
+	TitleMaterial      CreativeGetResDetailTitleMaterial `json:"title_material"`
+}
+
+// CreativeGetResDetailVideoMaterial 视频素材信息
+type CreativeGetResDetailVideoMaterial struct {
+	VideoId        string `json:"video_id"`         //视频ID
+	VideoCoverId   string `json:"video_cover_id"`   //视频封面ID
+	AwemeItemId    int64  `json:"aweme_item_id"`    //抖音视频ID
+	IsAutoGenerate int64  `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+}
+
+// CreativeGetResDetailImageMaterial 图片素材信息
+type CreativeGetResDetailImageMaterial struct {
+	ImageIds       []string `json:"image_ids"`        //图片ID列表
+	IsAutoGenerate int64    `json:"is_auto_generate"` //是否为派生创意标识，1：是，0：不是
+}
+
+// CreativeGetResDetailTitleMaterial 标题素材信息
+type CreativeGetResDetailTitleMaterial struct {
+	Title        string                             `json:"title"` //创意标题
+	DynamicWords []CreativeGetResDetailDynamicWords `json:"dynamic_words"`
+}
+
+// CreativeGetResDetailDynamicWords 动态词包对象列表
+type CreativeGetResDetailDynamicWords struct {
+	WordId      int64  //动态词包ID
+	DictName    string //创意词包名称
+	DefaultWord string //创意词包默认词
 }
 
 // CreativeGet 获取账户下创意列表
