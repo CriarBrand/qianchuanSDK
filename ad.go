@@ -316,6 +316,8 @@ type AdListGetFiltering struct {
 	AdCreateStartDate string  `json:"ad_create_start_date,omitempty"` // 计划创建开始时间，格式："yyyy-mm-dd"
 	AdCreateEndDate   string  `json:"ad_create_end_date,omitempty"`   // 计划创建结束时间，与ad_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
 	AdModifyTime      string  `json:"ad_modify_time,omitempty"`       // 计划修改时间，精确到小时，格式："yyyy-mm-dd HH"
+	AwemeId           int64   `json:"aweme_id"`                       //根据抖音号过滤
+	AutoManagerFilter string  `json:"auto_manager_filter"`            //按是否为托管计划过滤，允许值：ALL ：不限，AUTO_MANAGE ：托管计划，NORMAL ：非托管计划，默认为ALL
 }
 
 type AdListGetResData struct {
@@ -325,36 +327,39 @@ type AdListGetResData struct {
 }
 
 type AdListGetResDataDetail struct {
-	AdId          int64  `json:"ad_id"`
-	CampaignId    int64  `json:"campaign_id"`
-	MarketingGoal string `json:"marketing_goal"`
-	PromotionWay  string `json:"promotion_way"`
-	Name          string `json:"name"`
-	Status        string `json:"status"`
-	OptStatus     string `json:"opt_status"`
-	AdCreateTime  string `json:"ad_create_time"`
-	AdModifyTime  string `json:"ad_modify_time"`
-	ProductInfo   []struct {
-		Id            int64   `json:"id"`
-		Name          string  `json:"name"`
-		DiscountPrice float64 `json:"discount_price"`
-		Img           string
-	} `json:"product_info"`
-	AwemeInfo []struct {
-		AwemeId     int64  `json:"aweme_id"`
-		AwemeName   string `json:"aweme_name"`
-		AwemeShowId string `json:"aweme_show_id"`
-		AwemeAvatar string `json:"aweme_avatar"`
-	} `json:"aweme_info"`
-	DeliverySetting struct {
-		SmartBidType   string  `json:"smart_bid_type"`
-		ExternalAction string  `json:"external_action"`
-		Budget         float64 `json:"budget"`
-		BudgetMode     string  `json:"budget_mode"`
-		CpaBid         float64 `json:"cpa_bid"`
-		StartTime      string  `json:"start_time"`
-		EndTime        string  `json:"end_time"`
-	} `json:"delivery_setting"`
+	AdId            int64                           `json:"ad_id"`
+	CampaignId      int64                           `json:"campaign_id"`
+	MarketingGoal   string                          `json:"marketing_goal"`
+	PromotionWay    string                          `json:"promotion_way"`
+	Name            string                          `json:"name"`
+	Status          string                          `json:"status"`
+	OptStatus       string                          `json:"opt_status"`
+	AdCreateTime    string                          `json:"ad_create_time"`
+	AdModifyTime    string                          `json:"ad_modify_time"`
+	ProductInfo     []AdListGetResDataProductInfo   `json:"product_info"`
+	AwemeInfo       []AdListGetResDataAwemeInfo     `json:"aweme_info"`
+	DeliverySetting AdListGetResDataDeliverySetting `json:"delivery_setting"`
+}
+type AdListGetResDataProductInfo struct {
+	Id            int64   `json:"id"`
+	Name          string  `json:"name"`
+	DiscountPrice float64 `json:"discount_price"`
+	Img           string  `json:"img"`
+}
+type AdListGetResDataAwemeInfo struct {
+	AwemeId     int64  `json:"aweme_id"`
+	AwemeName   string `json:"aweme_name"`
+	AwemeShowId string `json:"aweme_show_id"`
+	AwemeAvatar string `json:"aweme_avatar"`
+}
+type AdListGetResDataDeliverySetting struct {
+	SmartBidType   string  `json:"smart_bid_type"`
+	ExternalAction string  `json:"external_action"`
+	Budget         float64 `json:"budget"`
+	BudgetMode     string  `json:"budget_mode"`
+	CpaBid         float64 `json:"cpa_bid"`
+	StartTime      string  `json:"start_time"`
+	EndTime        string  `json:"end_time"`
 }
 
 // AdListGetRes 获取广告账户数据-返回结构体
