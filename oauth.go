@@ -58,7 +58,7 @@ type OauthAccessTokenRes struct {
 }
 
 // OauthAccessToken 获取access_token
-func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res OauthAccessTokenRes, err error) {
+func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res *OauthAccessTokenRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_ACCESS_TOKEN), nil, OauthAccessTokenBody{
 		AppId:     m.Credentials.AppId,
 		Secret:    m.Credentials.AppSecret,
@@ -92,7 +92,7 @@ type OauthRefreshTokenRes struct {
 }
 
 // OauthRefreshToken 刷新access_token
-func (m *Manager) OauthRefreshToken(req OauthRefreshTokenReq) (res OauthRefreshTokenRes, err error) {
+func (m *Manager) OauthRefreshToken(req OauthRefreshTokenReq) (res *OauthRefreshTokenRes, err error) {
 	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_REFRESH_TOKEN), nil, OauthRefreshTokenBody{
 		AppId:        m.Credentials.AppId,
 		Secret:       m.Credentials.AppSecret,
