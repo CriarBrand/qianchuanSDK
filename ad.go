@@ -316,7 +316,7 @@ type AdListGetFiltering struct {
 	AdCreateStartDate string  `json:"ad_create_start_date,omitempty"` // 计划创建开始时间，格式："yyyy-mm-dd"
 	AdCreateEndDate   string  `json:"ad_create_end_date,omitempty"`   // 计划创建结束时间，与ad_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
 	AdModifyTime      string  `json:"ad_modify_time,omitempty"`       // 计划修改时间，精确到小时，格式："yyyy-mm-dd HH"
-	AwemeId           int64   `json:"aweme_id"`                       //根据抖音号过滤
+	AwemeId           int64   `json:"aweme_id,omitempty"`             //根据抖音号过滤
 	AutoManagerFilter string  `json:"auto_manager_filter"`            //按是否为托管计划过滤，允许值：ALL ：不限，AUTO_MANAGE ：托管计划，NORMAL ：非托管计划，默认为ALL
 }
 
