@@ -137,13 +137,17 @@ type ToolsAwemeMultiLevelCategoryGetResCategory struct { // 抖音作者名
 func (m *Manager) ToolsAwemeMultiLevelCategoryGet(req ToolsAwemeMultiLevelCategoryGetReq) (res *ToolsAwemeMultiLevelCategoryGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	behavior, err := json.Marshal(req.Behaviors)
-	if err != nil {
-		return nil, err
+	params := ""
+	if len(req.Behaviors) > 0 {
+		behavior, err := json.Marshal(req.Behaviors)
+		if err != nil {
+			return nil, err
+		}
+		params = fmt.Sprintf("&behaviors=%s", string(behavior))
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&behaviors=%v",
-			conf.API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET, req.AdvertiserId, string(behavior)), header, nil)
+		m.url("%s?advertiser_id=%d%s",
+			conf.API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET, req.AdvertiserId, params), header, nil)
 	return res, err
 }
 
