@@ -83,13 +83,18 @@ type ToolsAwemeCategoryTopAuthorGetResAuthor struct { // 抖音作者名
 func (m *Manager) ToolsAwemeCategoryTopAuthorGet(req ToolsAwemeCategoryTopAuthorGetReq) (res *ToolsAwemeCategoryTopAuthorGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	behavior, err := json.Marshal(req.Behaviors)
-	if err != nil {
-		return nil, err
+	params := ""
+	if len(req.Behaviors) > 0 {
+		behavior, err := json.Marshal(req.Behaviors)
+		if err != nil {
+			return nil, err
+		}
+		params = fmt.Sprintf("&behaviors=%s", string(behavior))
 	}
+
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&category_id=%d&behaviors=%v",
-			conf.API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET, req.AdvertiserId, req.CategoryId, string(behavior)), header, nil)
+		m.url("%s?advertiser_id=%d&category_id=%d%s",
+			conf.API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET, req.AdvertiserId, req.CategoryId, params), header, nil)
 	return res, err
 }
 
