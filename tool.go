@@ -111,7 +111,7 @@ type ToolsAwemeMultiLevelCategoryGetReq struct {
 type ToolsAwemeMultiLevelCategoryGetRes struct {
 	QCError
 	Data struct {
-		Categories []ToolsAwemeMultiLevelCategoryGetResCategory `json:"authors"`
+		Categories []ToolsAwemeMultiLevelCategoryGetResCategory `json:"categories"`
 	} `json:"data"`
 }
 type ToolsAwemeMultiLevelCategoryGetResCategory struct { // 抖音作者名
