@@ -194,13 +194,18 @@ type ToolsInterestActionActionCategoryResLevelFour struct { // 行为子类目
 func (m *Manager) ToolsInterestActionActionCategory(req ToolsInterestActionActionCategoryReq) (res *ToolsInterestActionActionCategoryRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	actionScene, err := json.Marshal(req.ActionScene)
-	if err != nil {
-		return nil, err
+	params := ""
+	if len(req.ActionScene) > 0 {
+		actionScene, err := json.Marshal(req.ActionScene)
+		if err != nil {
+			return nil, err
+		}
+		params = fmt.Sprintf("&action_scene=%s", string(actionScene))
 	}
+
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&action_scene=%s&action_days=%d",
-			conf.API_INTEREST_ACTION_ACTION_CATEGORY, req.AdvertiserId, string(actionScene), req.ActionDays), header, nil)
+		m.url("%s?advertiser_id=%d%s&action_days=%d",
+			conf.API_INTEREST_ACTION_ACTION_CATEGORY, req.AdvertiserId, params, req.ActionDays), header, nil)
 	return res, err
 }
 
@@ -232,13 +237,17 @@ type ToolsInterestActionActionKeywordResDetail struct { // 词包列表
 func (m *Manager) ToolsInterestActionActionKeyword(req ToolsInterestActionActionKeywordReq) (res *ToolsInterestActionActionKeywordRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	actionScene, err := json.Marshal(req.ActionScene)
-	if err != nil {
-		return nil, err
+	params := ""
+	if len(req.ActionScene) > 0 {
+		actionScene, err := json.Marshal(req.ActionScene)
+		if err != nil {
+			return nil, err
+		}
+		params = fmt.Sprintf("&action_scene=%s", string(actionScene))
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&query_words=%s&action_scene=%s&action_days=%d",
-			conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD, req.AdvertiserId, url.QueryEscape(req.QueryWords), url.QueryEscape(string(actionScene)), req.ActionDays), header, nil)
+		m.url("%s?advertiser_id=%d&query_words=%s%s&action_days=%d",
+			conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD, req.AdvertiserId, url.QueryEscape(req.QueryWords), params, req.ActionDays), header, nil)
 	return res, err
 }
 
@@ -352,17 +361,17 @@ type ToolsCreativeWordSelectResDetail struct { // 词包列表
 func (m *Manager) ToolsCreativeWordSelect(req ToolsCreativeWordSelectReq) (res *ToolsCreativeWordSelectRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	var CreativeWordIdsStr string
+	params := ""
 	if len(req.CreativeWordIds) > 0 {
 		creativeWordIds, err := json.Marshal(req.CreativeWordIds)
 		if err != nil {
 			return nil, err
 		}
-		CreativeWordIdsStr = string(creativeWordIds)
+		params = fmt.Sprintf("&creative_word_ids=%s", creativeWordIds)
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&creative_word_ids=%s",
-			conf.API_TOOLS_CREATIVE_WORD_SELECT, req.AdvertiserId, CreativeWordIdsStr), header, nil)
+		m.url("%s?advertiser_id=%d%s",
+			conf.API_TOOLS_CREATIVE_WORD_SELECT, req.AdvertiserId, params), header, nil)
 	return res, err
 }
 
