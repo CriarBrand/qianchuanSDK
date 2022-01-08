@@ -164,7 +164,7 @@ type ToolsInterestActionActionCategoryReq struct {
 // ToolsInterestActionActionCategoryRes 行为类目查询 的 响应结构体
 type ToolsInterestActionActionCategoryRes struct {
 	QCError
-	Data ToolsInterestActionActionCategoryResLevelOne `json:"data"`
+	Data []ToolsInterestActionActionCategoryResLevelOne `json:"data"`
 }
 type ToolsInterestActionActionCategoryResLevelOne struct { // 行为子类目
 	Id       string                                         `json:"id"`   //行为类目id
@@ -396,7 +396,7 @@ type DmpAudiencesGetRes struct {
 	} `json:"data"`
 }
 type DmpAudiencesGetResDetail struct { // 人群包列表
-	RetargetingTagsId  string `json:"retargeting_tags_id"`  //人群包id
+	RetargetingTagsId  int64  `json:"retargeting_tags_id"`  //人群包id
 	Name               string `json:"name"`                 //人群包名称
 	Source             string `json:"source"`               //人群包来源，自定义类详见【附录-DMP相关-人群包来源】，平台精选类返回空值
 	Status             int64  `json:"status"`               //人群包状态，详见【附录-DMP相关-人群包状态】
