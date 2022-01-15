@@ -317,7 +317,7 @@ type AdListGetFiltering struct {
 	AdCreateEndDate   string  `json:"ad_create_end_date,omitempty"`   // 计划创建结束时间，与ad_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
 	AdModifyTime      string  `json:"ad_modify_time,omitempty"`       // 计划修改时间，精确到小时，格式："yyyy-mm-dd HH"
 	AwemeId           int64   `json:"aweme_id,omitempty"`             //根据抖音号过滤
-	AutoManagerFilter string  `json:"auto_manager_filter"`            //按是否为托管计划过滤，允许值：ALL ：不限，AUTO_MANAGE ：托管计划，NORMAL ：非托管计划，默认为ALL
+	AutoManagerFilter string  `json:"auto_manager_filter,omitempty"`  //按是否为托管计划过滤，允许值：ALL ：不限，AUTO_MANAGE ：托管计划，NORMAL ：非托管计划，默认为ALL
 }
 
 type AdListGetResData struct {
@@ -567,6 +567,7 @@ type AdDetailGetResDeliverySetting struct {
 
 // AdDetailGetResAudience 定向设置
 type AdDetailGetResAudience struct {
+	AudienceMode           string   `json:"audience_mode"`            //人群定向模式，当promotion_way为 SIMPLE时返回，枚举值：AUTO智能推荐、CUSTOM自定义
 	District               string   `json:"district"`                 //地域定向类型，配合city字段使用，允许值：CITY：省市，COUNTY：区县，NONE：不限；默认值：NONE
 	City                   []int64  `json:"city"`                     //具体定向的城市列表，当 district 为COUNTY，city 为必填，枚举值详见【附件-city.json】；省市传法：city: [12]，district: CITY；区县的传法：city: [130102]，district: COUNTY
 	LocationType           string   `json:"location_type"`            //地域定向的用户状态类型，当 district 为COUNTY，CITY为必填，允许值：CURRENT：正在该地区的用户，HOME：居住在该地区的用户，TRAVEL；到该地区旅行的用户，ALL：该地区内的所有用户
