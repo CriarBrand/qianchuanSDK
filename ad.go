@@ -311,6 +311,7 @@ type AdListGetFiltering struct {
 	Ids               []int64 `json:"ids,omitempty"`                  // 按计划ID过滤，list长度限制 1-100
 	AdName            string  `json:"ad_name,omitempty"`              // 按计划名称过滤，长度为1-30个字符
 	Status            string  `json:"status,omitempty"`               // 按计划状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-广告计划查询状态】
+	PromotionWay      string  `json:"promotion_way,omitempty"`        //按推广方式过滤，允许值：STANDARD专业推广、SIMPLE极速推广
 	MarketingGoal     string  `json:"marketing_goal"`                 // 按营销目标过滤，允许值：VIDEO_PROM_GOODS：短视频带货；LIVE_PROM_GOODS：直播带货
 	CampaignId        int64   `json:"campaign_id,omitempty"`          // 按广告组ID过滤
 	AdCreateStartDate string  `json:"ad_create_start_date,omitempty"` // 计划创建开始时间，格式："yyyy-mm-dd"
