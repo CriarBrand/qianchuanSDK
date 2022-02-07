@@ -155,7 +155,7 @@ type ToolsInterestActionActionCategoryReq struct {
 // ToolsInterestActionActionCategoryRes 行为类目查询 的 响应结构体
 type ToolsInterestActionActionCategoryRes struct {
 	QCError
-	Data ToolsInterestActionActionCategoryResLevelOne `json:"data"`
+	Data []ToolsInterestActionActionCategoryResLevelOne `json:"data"`
 }
 type ToolsInterestActionActionCategoryResLevelOne struct { // 行为子类目
 	Id       string                                         `json:"id"`   //行为类目id
