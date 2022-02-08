@@ -29,15 +29,15 @@ type ToolsIndustryGetRes struct {
 	} `json:"data"`
 }
 type ToolsIndustryGetResDetail struct {
-	IndustryId                        int64  `json:"industry_id"`
-	IndustryName                      string `json:"industry_name"`
-	Level                             int64  `json:"level"`
-	ToolsAwemeCategoryTopAuthorGetRes int64  `json:"first_industry_id"`
-	FirstIndustryName                 string `json:"first_industry_name"`
-	SecondIndustryId                  int64  `json:"second_industry_id"`
-	SecondIndustryName                string `json:"second_industry_name"`
-	ThirdIndustryId                   int64  `json:"third_industry_id"`
-	ThirdIndustryName                 string `json:"third_industry_name"`
+	IndustryId         int64  `json:"industry_id"`
+	IndustryName       string `json:"industry_name"`
+	Level              int64  `json:"level"`
+	FirstIndustryId    int64  `json:"first_industry_id"`
+	FirstIndustryName  string `json:"first_industry_name"`
+	SecondIndustryId   int64  `json:"second_industry_id"`
+	SecondIndustryName string `json:"second_industry_name"`
+	ThirdIndustryId    int64  `json:"third_industry_id"`
+	ThirdIndustryName  string `json:"third_industry_name"`
 }
 
 // ToolsIndustryGet 获取行业列表
