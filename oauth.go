@@ -6,7 +6,6 @@ package qianchuanSDK
 import (
 	"context"
 	"encoding/json"
-
 	"github.com/CriarBrand/qianchuanSDK/conf"
 )
 
@@ -34,7 +33,14 @@ func (m *Manager) OauthConnect(param OauthParam) string {
 
 // OauthAccessTokenReq access_token请求
 type OauthAccessTokenReq struct {
-	Code string // 授权码
+	AuthCode string
+}
+
+type OauthAccessTokenBody struct {
+	AppId     int64  `json:"app_id"`
+	Secret    string `json:"secret"`
+	GrantType string `json:"grant_type"`
+	AuthCode  string `json:"auth_code"`
 }
 
 // OauthAccessTokenResData access_token返回
@@ -52,9 +58,13 @@ type OauthAccessTokenRes struct {
 }
 
 // OauthAccessToken 获取access_token
-func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res OauthAccessTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?app_id=%d&secret=%s&grant_type=auth_code&auth_code=%s",
-		conf.API_OAUTH_ACCESS_TOKEN, m.Credentials.AppId, m.Credentials.AppSecret, req.Code), nil, nil)
+func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res *OauthAccessTokenRes, err error) {
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_ACCESS_TOKEN), nil, OauthAccessTokenBody{
+		AppId:     m.Credentials.AppId,
+		Secret:    m.Credentials.AppSecret,
+		GrantType: "auth_code",
+		AuthCode:  req.AuthCode,
+	})
 	return res, err
 }
 
@@ -63,6 +73,13 @@ func (m *Manager) OauthAccessToken(req OauthAccessTokenReq) (res OauthAccessToke
 // OauthRefreshTokenReq 刷新access_token请求
 type OauthRefreshTokenReq struct {
 	RefreshToken string // 填写通过access_token获取到的refresh_token参数
+}
+
+type OauthRefreshTokenBody struct {
+	AppId        int64  `json:"app_id"`
+	Secret       string `json:"secret"`
+	GrantType    string `json:"grant_type"`
+	RefreshToken string `json:"refresh_token"`
 }
 
 // OauthRefreshTokenResData 刷新access_token返回
@@ -75,8 +92,12 @@ type OauthRefreshTokenRes struct {
 }
 
 // OauthRefreshToken 刷新access_token
-func (m *Manager) OauthRefreshToken(req OauthRefreshTokenReq) (res OauthRefreshTokenRes, err error) {
-	err = m.client.CallWithJson(context.Background(), &res, "GET", m.url("%s?app_id=%d&secret=%s&grant_type=auth_code&refresh_token=%s",
-		conf.API_OAUTH_REFRESH_TOKEN, m.Credentials.AppId, m.Credentials.AppSecret, req.RefreshToken), nil, nil)
+func (m *Manager) OauthRefreshToken(req OauthRefreshTokenReq) (res *OauthRefreshTokenRes, err error) {
+	err = m.client.CallWithJson(context.Background(), &res, "POST", m.url("%s", conf.API_OAUTH_REFRESH_TOKEN), nil, OauthRefreshTokenBody{
+		AppId:        m.Credentials.AppId,
+		Secret:       m.Credentials.AppSecret,
+		GrantType:    "refresh_token",
+		RefreshToken: req.RefreshToken,
+	})
 	return res, err
 }

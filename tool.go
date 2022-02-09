@@ -51,7 +51,6 @@ func (m *Manager) ToolsIndustryGet(req ToolsIndustryGetReq) (res *ToolsIndustryG
 		return nil, err
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
-	fmt.Println("返回错误：", err)
 	return res, err
 }
 
@@ -116,7 +115,7 @@ type ToolsAwemeMultiLevelCategoryGetReq struct {
 type ToolsAwemeMultiLevelCategoryGetRes struct {
 	QCError
 	Data struct {
-		Categories []ToolsAwemeMultiLevelCategoryGetResCategory `json:"authors"`
+		Categories []ToolsAwemeMultiLevelCategoryGetResCategory `json:"categories"`
 	} `json:"data"`
 }
 type ToolsAwemeMultiLevelCategoryGetResCategory struct { // 抖音作者名
@@ -377,17 +376,17 @@ type ToolsCreativeWordSelectResDetail struct { // 词包列表
 func (m *Manager) ToolsCreativeWordSelect(req ToolsCreativeWordSelectReq) (res *ToolsCreativeWordSelectRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	var CreativeWordIdsStr string
+	params := ""
 	if len(req.CreativeWordIds) > 0 {
 		creativeWordIds, err := json.Marshal(req.CreativeWordIds)
 		if err != nil {
 			return nil, err
 		}
-		CreativeWordIdsStr = string(creativeWordIds)
+		params = fmt.Sprintf("&creative_word_ids=%s", creativeWordIds)
 	}
 	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&creative_word_ids=%s",
-			conf.API_TOOLS_CREATIVE_WORD_SELECT, req.AdvertiserId, CreativeWordIdsStr), header, nil)
+		m.url("%s?advertiser_id=%d%s",
+			conf.API_TOOLS_CREATIVE_WORD_SELECT, req.AdvertiserId, params), header, nil)
 	return res, err
 }
 
@@ -412,7 +411,7 @@ type DmpAudiencesGetRes struct {
 	} `json:"data"`
 }
 type DmpAudiencesGetResDetail struct { // 人群包列表
-	RetargetingTagsId  string `json:"retargeting_tags_id"`  //人群包id
+	RetargetingTagsId  int64  `json:"retargeting_tags_id"`  //人群包id
 	Name               string `json:"name"`                 //人群包名称
 	Source             string `json:"source"`               //人群包来源，自定义类详见【附录-DMP相关-人群包来源】，平台精选类返回空值
 	Status             int64  `json:"status"`               //人群包状态，详见【附录-DMP相关-人群包状态】
