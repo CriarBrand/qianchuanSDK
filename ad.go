@@ -373,14 +373,22 @@ type AdListGetRes struct {
 func (m *Manager) AdListGet(req AdListGetReq) (res *AdListGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	// 接收一个结构体并转为string格式
-	filtering, err := json.Marshal(req.Filtering)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_AD_LIST_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&request_aweme_info=%d&filtering=%s&page=%d&page_size=%d",
-			conf.API_AD_LIST_GET, req.AdvertiserId, req.RequestAwemeInfo, string(filtering), req.Page, req.PageSize), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//// 接收一个结构体并转为string格式
+	//filtering, err := json.Marshal(req.Filtering)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&request_aweme_info=%d&filtering=%s&page=%d&page_size=%d",
+	//		conf.API_AD_LIST_GET, req.AdvertiserId, req.RequestAwemeInfo, string(filtering), req.Page, req.PageSize), header, nil)
 	return res, err
 }
 

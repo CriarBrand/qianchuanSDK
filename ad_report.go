@@ -12,13 +12,13 @@ import (
 
 // AdvertiserReportReq 获取广告账户数据-请求
 type AdvertiserReportReq struct {
-	AdvertiserId int64                     // 千川广告主账户id
-	StartDate    string                    // 开始时间，格式 2021-04-05
-	EndDate      string                    // 结束时间，格式 2021-04-05，时间跨度不能超过180天
-	Fields       []string                  // 需要查询的消耗指标
+	AdvertiserId int64                     `json:"advertiser_id"` // 千川广告主账户id
+	StartDate    string                    `json:"start_date"`    // 开始时间，格式 2021-04-05
+	EndDate      string                    `json:"end_date"`      // 结束时间，格式 2021-04-05，时间跨度不能超过180天
+	Fields       []string                  `json:"fields"`        // 需要查询的消耗指标
 	Filtering    AdvertiserReportFiltering `json:"filtering"`
 	//MarketingGoal string   // 过滤条件 营销目标，允许值：VIDEO_PROM_GOODS：短视频带货  LIVE_PROM_GOODS：直播间带货  ALL：不限
-	AccessToken string // 调用/oauth/access_token/生成的token，此token需要用户授权。
+	AccessToken string `json:"access_token"` // 调用/oauth/access_token/生成的token，此token需要用户授权。
 }
 
 type AdvertiserReportFiltering struct {
@@ -143,28 +143,36 @@ type ReportAdGetRes struct {
 func (m *Manager) ReportAdGet(req ReportAdGetReq) (res *ReportAdGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	// 接收一个数组并转为string格式
-	fields, err := json.Marshal(req.Fields)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_REPORT_AD_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	// 接收一个结构体并转为string格式
-	filtering, err := json.Marshal(req.Filtering)
-	if err != nil {
-		panic(err)
-	}
-	// 判断OrderType或OrderField是否为空，如果为空则get参数不加上
-	if req.OrderType == "" || req.OrderField == "" {
-		err = m.client.CallWithJson(context.Background(), &res, "GET",
-			m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&page=%d&page_size=%d",
-				conf.API_REPORT_AD_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
-				string(filtering), req.Page, req.PageSize), header, nil)
-		return res, err
-	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&order_field=%s&order_type=%s&page=%d&page_size=%d",
-			conf.API_REPORT_AD_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
-			string(filtering), req.OrderField, req.OrderType, req.Page, req.PageSize), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//// 接收一个数组并转为string格式
+	//fields, err := json.Marshal(req.Fields)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//// 接收一个结构体并转为string格式
+	//filtering, err := json.Marshal(req.Filtering)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//// 判断OrderType或OrderField是否为空，如果为空则get参数不加上
+	//if req.OrderType == "" || req.OrderField == "" {
+	//	err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&page=%d&page_size=%d",
+	//			conf.API_REPORT_AD_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+	//			string(filtering), req.Page, req.PageSize), header, nil)
+	//	return res, err
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&order_field=%s&order_type=%s&page=%d&page_size=%d",
+	//		conf.API_REPORT_AD_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+	//		string(filtering), req.OrderField, req.OrderType, req.Page, req.PageSize), header, nil)
 	return res, err
 }
 
@@ -238,28 +246,36 @@ type ReportCreativeGetRes struct {
 func (m *Manager) ReportCreativeGet(req ReportCreativeGetReq) (res *ReportCreativeGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	// 接收一个数组并转为string格式
-	fields, err := json.Marshal(req.Fields)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_REPORT_CREATIVE_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	// 接收一个结构体并转为string格式
-	filtering, err := json.Marshal(req.Filtering)
-	if err != nil {
-		panic(err)
-	}
-	// 判断OrderType或OrderField是否为空，如果为空则get参数不加上
-	if req.OrderType == "" || req.OrderField == "" {
-		err = m.client.CallWithJson(context.Background(), &res, "GET",
-			m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&page=%d&page_size=%d",
-				conf.API_REPORT_CREATIVE_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
-				string(filtering), req.Page, req.PageSize), header, nil)
-		return res, err
-	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&order_field=%s&order_type=%s&page=%d&page_size=%d",
-			conf.API_REPORT_CREATIVE_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
-			string(filtering), req.OrderField, req.OrderType, req.Page, req.PageSize), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//// 接收一个数组并转为string格式
+	//fields, err := json.Marshal(req.Fields)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//// 接收一个结构体并转为string格式
+	//filtering, err := json.Marshal(req.Filtering)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//// 判断OrderType或OrderField是否为空，如果为空则get参数不加上
+	//if req.OrderType == "" || req.OrderField == "" {
+	//	err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//		m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&page=%d&page_size=%d",
+	//			conf.API_REPORT_CREATIVE_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+	//			string(filtering), req.Page, req.PageSize), header, nil)
+	//	return res, err
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&start_date=%s&end_date=%s&fields=%s&filtering=%s&order_field=%s&order_type=%s&page=%d&page_size=%d",
+	//		conf.API_REPORT_CREATIVE_GET, req.AdvertiserId, req.StartDate, req.EndDate, string(fields),
+	//		string(filtering), req.OrderField, req.OrderType, req.Page, req.PageSize), header, nil)
 	return res, err
 }
 

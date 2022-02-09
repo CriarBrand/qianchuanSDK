@@ -217,14 +217,22 @@ type FileImageGetResDetail struct { //图片列表
 func (m *Manager) FileImageGet(req FileImageGetReq) (res *FileImageGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	// 接收一个结构体并转为string格式
-	filtering, err := json.Marshal(req.Filtering)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_FILE_IMAGE_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
-			conf.API_FILE_IMAGE_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//// 接收一个结构体并转为string格式
+	//filtering, err := json.Marshal(req.Filtering)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
+	//		conf.API_FILE_IMAGE_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
 	return res, err
 }
 
@@ -279,14 +287,22 @@ type FileVideoGetResDetail struct { //素材列表
 func (m *Manager) FileVideoGet(req FileVideoGetReq) (res *FileVideoGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	// 接收一个结构体并转为string格式
-	filtering, err := json.Marshal(req.Filtering)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_FILE_VIDEO_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
-			conf.API_FILE_VIDEO_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//// 接收一个结构体并转为string格式
+	//filtering, err := json.Marshal(req.Filtering)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&filtering=%s&page=%d&page_size=%d",
+	//		conf.API_FILE_VIDEO_GET, req.AdvertiserId, string(filtering), req.Page, req.PageSize), header, nil)
 	return res, err
 }
 
@@ -332,13 +348,21 @@ type FileVideoAwemeGetResDetail struct { //视频素材列表
 func (m *Manager) FileVideoAwemeGet(req FileVideoAwemeGetReq) (res *FileVideoAwemeGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	// 接收一个结构体并转为string格式
-	filtering, err := json.Marshal(req.Filtering)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_FILE_VIDEO_AWEME_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&aweme_id=%d&filtering=%s&cursor=%d&count=%d",
-			conf.API_FILE_VIDEO_AWEME_GET, req.AdvertiserId, req.AwemeId, string(filtering), req.Cursor, req.Count), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//// 接收一个结构体并转为string格式
+	//filtering, err := json.Marshal(req.Filtering)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&aweme_id=%d&filtering=%s&cursor=%d&count=%d",
+	//		conf.API_FILE_VIDEO_AWEME_GET, req.AdvertiserId, req.AwemeId, string(filtering), req.Cursor, req.Count), header, nil)
 	return res, err
 }
