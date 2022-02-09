@@ -45,9 +45,12 @@ func (m *Manager) ToolsIndustryGet(req ToolsIndustryGetReq) (res *ToolsIndustryG
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?level=%d&type=%s",
-			conf.API_TOOLS_INDUSTRY_GET, req.Level, url.QueryEscape(req.Type)), header, nil)
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_TOOLS_INDUSTRY_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
+	if err != nil {
+		return nil, err
+	}
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
 	fmt.Println("返回错误：", err)
 	return res, err
 }
@@ -83,13 +86,20 @@ type ToolsAwemeCategoryTopAuthorGetResAuthor struct { // 抖音作者名
 func (m *Manager) ToolsAwemeCategoryTopAuthorGet(req ToolsAwemeCategoryTopAuthorGetReq) (res *ToolsAwemeCategoryTopAuthorGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	behavior, err := json.Marshal(req.Behaviors)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
 		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&category_id=%d&behaviors=%v",
-			conf.API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET, req.AdvertiserId, req.CategoryId, string(behavior)), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+	//behavior, err := json.Marshal(req.Behaviors)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&category_id=%d&behaviors=%v",
+	//		conf.API_TOOLS_AWEME_CATEGORY_TOP_AUTHOR_GET, req.AdvertiserId, req.CategoryId, string(behavior)), header, nil)
 	return res, err
 }
 
@@ -132,13 +142,21 @@ type ToolsAwemeMultiLevelCategoryGetResCategory struct { // 抖音作者名
 func (m *Manager) ToolsAwemeMultiLevelCategoryGet(req ToolsAwemeMultiLevelCategoryGetReq) (res *ToolsAwemeMultiLevelCategoryGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	behavior, err := json.Marshal(req.Behaviors)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
 	if err != nil {
 		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&behaviors=%v",
-			conf.API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET, req.AdvertiserId, string(behavior)), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//behavior, err := json.Marshal(req.Behaviors)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&behaviors=%v",
+	//		conf.API_TOOLS_AWEME_MULTI_LEVEL_CATEGORY_GET, req.AdvertiserId, string(behavior)), header, nil)
 	return res, err
 }
 
@@ -185,13 +203,21 @@ type ToolsInterestActionActionCategoryResLevelFour struct { // 行为子类目
 func (m *Manager) ToolsInterestActionActionCategory(req ToolsInterestActionActionCategoryReq) (res *ToolsInterestActionActionCategoryRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	actionScene, err := json.Marshal(req.ActionScene)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_INTEREST_ACTION_ACTION_CATEGORY
+	reqUrl, err = BuildQuery(reqUrl, req, []string{})
 	if err != nil {
 		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&action_scene=%s&action_days=%d",
-			conf.API_INTEREST_ACTION_ACTION_CATEGORY, req.AdvertiserId, string(actionScene), req.ActionDays), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//actionScene, err := json.Marshal(req.ActionScene)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&action_scene=%s&action_days=%d",
+	//		conf.API_INTEREST_ACTION_ACTION_CATEGORY, req.AdvertiserId, string(actionScene), req.ActionDays), header, nil)
 	return res, err
 }
 
@@ -223,13 +249,21 @@ type ToolsInterestActionActionKeywordResDetail struct { // 词包列表
 func (m *Manager) ToolsInterestActionActionKeyword(req ToolsInterestActionActionKeywordReq) (res *ToolsInterestActionActionKeywordRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	actionScene, err := json.Marshal(req.ActionScene)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD
+	reqUrl, err = BuildQuery(reqUrl, req, []string{})
 	if err != nil {
 		return nil, err
 	}
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&query_words=%s&action_scene=%s&action_days=%d",
-			conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD, req.AdvertiserId, url.QueryEscape(req.QueryWords), url.QueryEscape(string(actionScene)), req.ActionDays), header, nil)
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//actionScene, err := json.Marshal(req.ActionScene)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&query_words=%s&action_scene=%s&action_days=%d",
+	//		conf.API_TOOLS_INTEREST_ACTION_ACTION_KEYWORD, req.AdvertiserId, url.QueryEscape(req.QueryWords), url.QueryEscape(string(actionScene)), req.ActionDays), header, nil)
 	return res, err
 }
 
@@ -392,8 +426,16 @@ type DmpAudiencesGetResDetail struct { // 人群包列表
 func (m *Manager) DmpAudiencesGet(req DmpAudiencesGetReq) (res *DmpAudiencesGetRes, err error) {
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
-	err = m.client.CallWithJson(context.Background(), &res, "GET",
-		m.url("%s?advertiser_id=%d&retargeting_tags_type=%d&offset=%d&limit=%d",
-			conf.API_DMP_AUDIENCES_GET, req.AdvertiserId, req.RetargetingTagsType, req.Offset, req.Limit), header, nil)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_DMP_AUDIENCES_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
+	if err != nil {
+		return nil, err
+	}
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+
+	//err = m.client.CallWithJson(context.Background(), &res, "GET",
+	//	m.url("%s?advertiser_id=%d&retargeting_tags_type=%d&offset=%d&limit=%d",
+	//		conf.API_DMP_AUDIENCES_GET, req.AdvertiserId, req.RetargetingTagsType, req.Offset, req.Limit), header, nil)
 	return res, err
 }
