@@ -113,6 +113,5 @@ func BuildQuery(reqUrl string, param interface{}, noInclude []string) (string, e
 	if paramStr != "" {
 		reqUrl += "?" + paramStr
 	}
-	fmt.Println("请求", reqUrl)
 	return reqUrl, nil
 }
