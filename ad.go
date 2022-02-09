@@ -6,7 +6,6 @@ package qianchuanSDK
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/CriarBrand/qianchuanSDK/conf"
 	"net/http"
 )
@@ -163,11 +162,11 @@ type AdCreateRes struct {
 
 // AdCreate 创建计划（含创意生成规则）
 func (m *Manager) AdCreate(req AdCreateReq) (res *AdCreateRes, err error) {
-	marshal, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Printf("%+v\n", string(marshal))
+	//marshal, err := json.Marshal(req)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//fmt.Printf("%+v\n", string(marshal))
 	header := http.Header{}
 	header.Add("Access-Token", req.AccessToken)
 	err = m.client.CallWithJson(context.Background(), &res, "POST",

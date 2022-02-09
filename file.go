@@ -84,7 +84,6 @@ func (m *Manager) FileImageAd(req FileImageAdReq) (res *FileImageAdRes, err erro
 
 		resp, err := HttpClient.Do(request)
 		if err != nil {
-			fmt.Println("resp err: ", err)
 			return nil, err
 		}
 		defer resp.Body.Close()
