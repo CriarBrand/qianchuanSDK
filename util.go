@@ -84,7 +84,6 @@ func BuildQuery(reqUrl string, param interface{}, noInclude []string) (string, e
 		}
 		if !omit {
 			//整型序列化后再反序列化到map[string]interface{}会变成float64
-			fmt.Printf("%T,%v\n", v, v)
 			if float64Value, ok := v.(float64); ok {
 				//判断是不是真的是浮点数
 				if float64Value > math.Floor(float64Value) {
