@@ -438,3 +438,44 @@ func (m *Manager) DmpAudiencesGet(req DmpAudiencesGetReq) (res *DmpAudiencesGetR
 	//		conf.API_DMP_AUDIENCES_GET, req.AdvertiserId, req.RetargetingTagsType, req.Offset, req.Limit), header, nil)
 	return res, err
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+
+type ToolsAwemeAuthorInfoGetReq struct {
+	AccessToken  string   `json:"access_token"`
+	AdvertiserId int64    `json:"advertiser_id"`       // 广告主ID
+	LabelIds     []int64  `json:"label_ids"`           // 抖音号id列表，取值大小：1～50；label_id即计划中设置的抖音达人账号的id
+	Behaviors    []string `json:"behaviors,omitempty"` //抖音用户行为类型 允许值: "FOLLOWED_USER","COMMENTED_USER","LIKED_USER","SHARED_USER"
+}
+
+type ToolsAwemeAuthorInfoGetRes struct {
+	QCError
+	Data ToolsAwemeAuthorInfoGetResData `json:"data"`
+}
+
+type ToolsAwemeAuthorInfoGetResData struct {
+	Authors []ToolsAwemeAuthorInfoGetResDataAuthor `json:"authors"`
+}
+
+type ToolsAwemeAuthorInfoGetResDataAuthor struct {
+	AuthorName      string `json:"author_name"`
+	LabelId         int64  `json:"label_id"`
+	CoverNumStr     string `json:"cover_num_str"`
+	TotalFansNumStr string `json:"total_fans_num_str"`
+	Avatar          string `json:"avatar"`
+	AwemeId         string `json:"aweme_id"`
+}
+
+// ToolsAwemeAuthorInfoGet 查询抖音号id对应的达人信息(巨量引擎)
+func (m *Manager) ToolsAwemeAuthorInfoGet(req ToolsAwemeAuthorInfoGetReq) (res *ToolsAwemeAuthorInfoGetRes, err error) {
+	header := http.Header{}
+	header.Add("Access-Token", req.AccessToken)
+
+	reqUrl := conf.API_HTTP_SCHEME + conf.API_HOST + conf.API_TOOLS_AWEME_AUTHOR_INFO_GET
+	reqUrl, err = BuildQuery(reqUrl, req, []string{"access_token"})
+	if err != nil {
+		return nil, err
+	}
+	err = m.client.CallWithJson(context.Background(), &res, "GET", reqUrl, header, nil)
+	return res, err
+}
