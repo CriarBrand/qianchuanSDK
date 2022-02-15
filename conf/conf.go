@@ -142,4 +142,9 @@ const (
 
 	// API_DMP_AUDIENCES_GET 查询人群包列表
 	API_DMP_AUDIENCES_GET = "/open_api/v1.0/qianchuan/dmp/audiences/get/"
+
+	//---------------千川巨量--------------------
+
+	//查询抖音号id对应的达人信息
+	API_TOOLS_AWEME_AUTHOR_INFO_GET = "/open_api/2/tools/aweme_author_info/get/"
 )
