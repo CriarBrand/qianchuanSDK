@@ -46,6 +46,7 @@ type AdCreateDeliverySetting struct {
 }
 
 type AdCreateAudience struct {
+	AudienceMode           string   `json:"audience_mode,omitempty"`            //人群定向模式 当promotion_way为STANDARD专业推广，千川策略赋默认值自定义，无需传值 当promotion_way为SIMPLE极速推广，需入参，允许值：AUTO智能推荐、CUSTOM自定义
 	District               string   `json:"district,omitempty"`                 // 地域定向类型，配合 city 字段使用，允许值：CITY 省市， COUNTY 区县， NONE 不限默认值为NONE
 	City                   []int64  `json:"city,omitempty"`                     // 具体定向的城市列表，当 district 为COUNTY，CITY为必填，枚举值详见【附件-city.json】省市的传法："city" : [12], "district" : "CITY"区县的传法："city" : [130102], "district" : "COUNTY"
 	LocationType           string   `json:"location_type,omitempty"`            // 地域定向的用户状态类型，当 district 为COUNTY，CITY为必填，允许值：CURRENT 正在该地区的用户、HOME 居住在该地区的用户、TRAVEL 到该地区旅行的用户、ALL 该地区内的所有用户
