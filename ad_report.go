@@ -111,7 +111,7 @@ type ReportAdGetResDetail struct {
 	PrepayOrderAmount          float64 `json:"prepay_order_amount"`            // 广告预售订单金额
 	DyFollow                   int64   `json:"dy_follow"`                      // 新增粉丝数
 	ConvertCnt                 int64   `json:"convert_cnt"`                    // 转化数
-	ConvertCost                int64   `json:"convert_cost"`                   // 转化成本
+	ConvertCost                float64 `json:"convert_cost"`                   // 转化成本
 	ConvertRate                float64 `json:"convert_rate"`                   // 转化率
 	DyShare                    int64   `json:"dy_share"`                       // 分享次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
 	DyComment                  int64   `json:"dy_comment"`                     // 评论次数。直播间带货：LIVE_PROM_GOODS 不支持该指标
