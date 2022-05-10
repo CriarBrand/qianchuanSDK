@@ -58,6 +58,7 @@ type CreativeGetReqFiltering struct {
 	AdIds                   []int64 `json:"ad_ids,omitempty"`                     //按计划ID过滤，list长度限制 1-100
 	CreativeId              int64   `json:"creative_id,omitempty"`                //按创意ID过滤
 	CreativeMaterialMode    string  `json:"creative_material_mode,omitempty"`     //按创意呈现方式过滤，允许值： CUSTOM_CREATIVE 自定义创意、PROGRAMMATIC_CREATIVE 程序化创意
+	MarketingScene          string  `json:"marketing_scene"`                      //创意对应计划的营销场景，允许值： ALL 不限 FEED 通投广告，默认为FEED SEARCH 搜索广告
 	Status                  string  `json:"status,omitempty"`                     //按创意状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-创意查询状态】
 	MarketingGoal           string  `json:"marketing_goal"`                       //按营销目标过滤，允许值：VIDEO_PROM_GOODS 短视频带货、LIVE_PROM_GOODS 直播带货
 	CampaignId              int64   `json:"campaign_id,omitempty"`                //按广告组ID过滤
@@ -80,17 +81,19 @@ type CreativeGetRes struct {
 	} `json:"data"`
 }
 type CreativeGetResDetail struct { //创意列表
-	AdId               int64                             `json:"ad_id"`                //计划ID
-	CreativeId         int64                             `json:"creative_id"`          //创意ID
-	Status             string                            `json:"status"`               //创意状态
-	OptStatus          string                            `json:"opt_status"`           //创意操作状态
-	ImageMode          string                            `json:"image_mode"`           //创意素材类型
-	CreativeCreateTime string                            `json:"creative_create_time"` //创意创建时间
-	CreativeModifyTime string                            `json:"creative_modify_time"` //创意修改时间
-	LabAdType          string                            `json:"lab_ad_type"`          //托管计划类型
-	VideoMaterial      CreativeGetResDetailVideoMaterial `json:"video_material"`
-	ImageMaterial      CreativeGetResDetailImageMaterial `json:"image_material"`
-	TitleMaterial      CreativeGetResDetailTitleMaterial `json:"title_material"`
+	AdId                 int64                             `json:"ad_id"`                  //计划ID
+	CreativeId           int64                             `json:"creative_id"`            //创意ID
+	Status               string                            `json:"status"`                 //创意状态
+	MarketingScene       string                            `json:"marketing_scene"`        //创意对应计划的营销场景，枚举值： FEED 通投广告，默认为FEED SEARCH 搜索广告
+	CreativeMaterialMode string                            `json:"creative_material_mode"` //创意呈现方式，CUSTOM_CREATIVE: 自定义创意，PROGRAMMATIC_CREATIVE: 程序化创意
+	OptStatus            string                            `json:"opt_status"`             //创意操作状态
+	ImageMode            string                            `json:"image_mode"`             //创意素材类型
+	CreativeCreateTime   string                            `json:"creative_create_time"`   //创意创建时间
+	CreativeModifyTime   string                            `json:"creative_modify_time"`   //创意修改时间
+	LabAdType            string                            `json:"lab_ad_type"`            //托管计划类型
+	VideoMaterial        CreativeGetResDetailVideoMaterial `json:"video_material"`
+	ImageMaterial        CreativeGetResDetailImageMaterial `json:"image_material"`
+	TitleMaterial        CreativeGetResDetailTitleMaterial `json:"title_material"`
 }
 
 // CreativeGetResDetailVideoMaterial 视频素材信息
