@@ -313,6 +313,7 @@ type AdListGetFiltering struct {
 	Status            string  `json:"status,omitempty"`               // 按计划状态过滤，不传入即默认返回“所有不包含已删除”，其他规则详见【附录-广告计划查询状态】
 	PromotionWay      string  `json:"promotion_way,omitempty"`        //按推广方式过滤，允许值：STANDARD专业推广、SIMPLE极速推广
 	MarketingGoal     string  `json:"marketing_goal"`                 // 按营销目标过滤，允许值：VIDEO_PROM_GOODS：短视频带货；LIVE_PROM_GOODS：直播带货
+	MarketingScene    string  `json:"marketing_scene"`                // 按营销场景过滤，允许值：ALL 全部，FEED 通投广告，SEARCH 搜索广告，默认为FEED
 	CampaignId        int64   `json:"campaign_id,omitempty"`          // 按广告组ID过滤
 	AdCreateStartDate string  `json:"ad_create_start_date,omitempty"` // 计划创建开始时间，格式："yyyy-mm-dd"
 	AdCreateEndDate   string  `json:"ad_create_end_date,omitempty"`   // 计划创建结束时间，与ad_create_start_date搭配使用，格式："yyyy-mm-dd"，时间跨度不能超过180天
@@ -332,6 +333,7 @@ type AdListGetResDataDetail struct {
 	CampaignId      int64                           `json:"campaign_id"`
 	MarketingGoal   string                          `json:"marketing_goal"`
 	PromotionWay    string                          `json:"promotion_way"`
+	MarketingScene  string                          `json:"marketing_scene"`
 	Name            string                          `json:"name"`
 	Status          string                          `json:"status"`
 	OptStatus       string                          `json:"opt_status"`
