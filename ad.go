@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-// AdCreateReq 获取广告账户数据-请求
+// AdCreateReq 创建计划-请求
 type AdCreateReq struct {
 	AccessToken string       // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	Body        AdCreateBody // POST请求的data
@@ -20,6 +20,7 @@ type AdCreateBody struct {
 	AdvertiserId    int64                   `json:"advertiser_id"`           // 千川广告主账户id
 	MarketingGoal   string                  `json:"marketing_goal"`          // 营销目标，允许值：VIDEO_PROM_GOODS 短视频带货、LIVE_PROM_GOODS 直播带货
 	PromotionWay    string                  `json:"promotion_way,omitempty"` // 推广方式 ，目前仅支持专业版，不支持极速版，允许值：STANDARD（默认）
+	MarketingScene  string                  `json:"marketing_scene"`         // 营销场景，允许值：FEED 通投广告，SEARCH 搜索广告
 	Name            string                  `json:"name"`                    // 计划名称，长度为1-100个字符，其中1个汉字算2位字符。名称不可重复，否则会报错
 	CampaignId      int64                   `json:"campaign_id"`             // 千川广告组id
 	AwemeId         int64                   `json:"aweme_id"`
@@ -155,7 +156,7 @@ type AdCreateResData struct {
 	AdId int64 `json:"ad_id"` // 创建的计划id
 }
 
-// AdCreateRes 获取广告账户数据-返回结构体
+// AdCreateRes 创建计划-返回结构体
 type AdCreateRes struct {
 	QCError
 	Data AdCreateResData `json:"data"`
@@ -177,7 +178,7 @@ func (m *Manager) AdCreate(req AdCreateReq) (res *AdCreateRes, err error) {
 
 // ---------------------------------------------------------------------------------------------------------------------
 
-// AdUpdateReq 获取广告账户数据-请求
+// AdUpdateReq 更新计划-请求
 type AdUpdateReq struct {
 	AccessToken string       // 调用/oauth/access_token/生成的token，此token需要用户授权。
 	Body        AdUpdateBody // POST请求的data
@@ -279,7 +280,7 @@ type AdUpdateResData struct {
 	} `json:"error_list"` // 错误list，计划为分块更新，存在部分内容更新失败，部分内容更新成功的的情况。若计划更新成功，则返回为空数组；若更新失败，则返回错误的部分及原因
 }
 
-// AdUpdateRes 获取广告账户数据-返回结构体
+// AdUpdateRes 更新计划-返回结构体
 type AdUpdateRes struct {
 	QCError
 	Data AdUpdateResData `json:"data"`
@@ -688,15 +689,16 @@ type AdDetailGetResCreativePromotionCardMaterial struct {
 	ButtonSmartOptimization int64    `json:"button_smart_optimization"` //智能优选行动号召按钮文案开关
 }
 type AdDetailGetResData struct {
-	AdID                          int64                                     `json:"ad_id"`          //计划ID
-	CampaignId                    int64                                     `json:"campaign_id"`    //广告组ID
-	MarketingGoal                 string                                    `json:"marketing_goal"` //营销目标
-	PromotionWay                  string                                    `json:"promotion_way"`  //推广方式
-	Name                          string                                    `json:"name"`           //计划名称
-	Status                        string                                    `json:"status"`         //计划投放状态
-	OptStatus                     string                                    `json:"opt_status"`     //计划操作状态
-	AdCreateTime                  string                                    `json:"ad_create_time"` //计划创建时间
-	AdModifyTime                  string                                    `json:"ad_modify_time"` //计划修改时间
+	AdID                          int64                                     `json:"ad_id"`           //计划ID
+	CampaignId                    int64                                     `json:"campaign_id"`     //广告组ID
+	MarketingGoal                 string                                    `json:"marketing_goal"`  //营销目标
+	PromotionWay                  string                                    `json:"promotion_way"`   //推广方式
+	MarketingScene                string                                    `json:"marketing_scene"` // 营销场景，允许值：FEED 通投广告，SEARCH 搜索广告
+	Name                          string                                    `json:"name"`            //计划名称
+	Status                        string                                    `json:"status"`          //计划投放状态
+	OptStatus                     string                                    `json:"opt_status"`      //计划操作状态
+	AdCreateTime                  string                                    `json:"ad_create_time"`  //计划创建时间
+	AdModifyTime                  string                                    `json:"ad_modify_time"`  //计划修改时间
 	AwemeInfo                     []AdDetailGetResAweme                     `json:"aweme_info"`
 	ProductInfo                   []AdDetailGetResProduct                   `json:"product_info"`
 	RoomInfo                      []AdDetailGetResRoom                      `json:"room_info"`
