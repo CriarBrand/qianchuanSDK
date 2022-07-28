@@ -23,6 +23,7 @@ type AdvertiserReportReq struct {
 
 type AdvertiserReportFiltering struct {
 	MarketingGoal string `json:"marketing_goal"`
+	OrderPlatform string `json:"order_platform"`
 }
 type AdvertiserReportResDetail struct {
 	AdvertiserId         int64   `json:"advertiser_id"`            // 广告主id
