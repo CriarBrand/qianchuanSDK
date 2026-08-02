@@ -214,6 +214,7 @@ fmt.Println(refreshResponse.Data.AccessToken)
 | `conf/`          | API 地址及配置          |
 
 ## 2026 维护路线图
+项目恢复维护进度请查看：https://github.com/CriarBrand/qianchuanSDK/issues/20
 
 ### 第一阶段：恢复可用性
 
